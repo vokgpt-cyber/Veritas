@@ -1,0 +1,10 @@
+# Optional local transcript normalization rules.
+#
+# Copy this file to config/address_corrections.yaml and add local regex
+# replacements for recurring ASR mistakes. The real file is ignored by Git
+# because it can contain client/case addresses and matter-specific terms.
+
+addresses: {}
+legal_refs: {}
+monetary: {}
+abbreviations: {}

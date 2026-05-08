@@ -1,0 +1,123 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+dist/
+build/
+*.egg
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!.env.docker.example
+.env.docker
+.env.local
+.env.production
+*.pem
+*.key
+*.crt
+secrets/
+
+# ML model cache (large files, download at runtime)
+models/
+*.pt
+*.ckpt
+*.bin
+*.safetensors
+*.onnx
+.cache/
+huggingface/
+
+# Audio data and meeting outputs (SENSITIVE — never commit)
+data/
+data/meetings/
+data/uploads/
+data/test/*.wav
+data/test/*.mp3
+data/test/*.ogg
+data/test/*.flac
+*.wav
+*.mp3
+*.ogg
+*.flac
+*.m4a
+*.aac
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+
+# Transcripts and protocols (SENSITIVE)
+*.transcript
+*.docx
+*.jsonl
+output/
+deliverables/
+data/archive/
+alignment_compare*.html
+veritas_protocol_package.zip
+
+# Local vocabularies can contain names, clients, addresses, and case terms.
+config/hot_words.yaml
+config/address_corrections.yaml
+
+# Docker
+docker-compose.override.yml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/
+frontend/vite-dev.*.log
+
+# Node (frontend)
+node_modules/
+frontend/node_modules/
+frontend/dist/
+frontend/build/
+.next/
+
+# Backups (stored separately)
+VERITAS_backups/
+
+# Benchmarks (transient — regenerated per evaluation pass)
+benchmarks/**
+!benchmarks/
+!benchmarks/scripts/
+!benchmarks/scripts/**
+!benchmarks/README.md
+scripts/llm_compare/
+scripts/phase5_*.md
+scripts/*_log.txt
+
+# Local tool state
+.claude/settings.local.json
+.pytest_cache/
+pytest-cache-files-*/
+*.backup
+*.bak
+
+# Temporary files
+tmp/
+temp/
+*.tmp

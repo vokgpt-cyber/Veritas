@@ -1,0 +1,329 @@
+# EPAM VERITAS v2.0 — Default Configuration
+# Verbal Intelligence, Transcription and Summarization
+# All parameters can be overridden via environment variables with EPAM_ prefix
+
+# Server configuration
+server:
+  # Server bind address
+  host: "127.0.0.1"
+  # Server port. 8765 (was 8000) — picked to avoid collisions with
+  # FastAPI/Django default 8000, alt-HTTP 8080, common dev tools 5000.
+  # Override via EPAM_BACKEND_PORT env var; the launcher and the
+  # frontend Vite proxy honour the same var.
+  port: 8765
+  # Number of worker processes (1 for single GPU, increase for CPU-only)
+  workers: 1
+  # CORS allowed origins for frontend communication
+  cors_origins:
+    - "http://localhost:3000"
+    - "http://localhost:3001"
+
+# Pipeline configuration (Block 5d)
+pipeline:
+  # Profile selection: auto (detect from diarization), small (2-4 speakers), large (5+)
+  profile: "auto"
+  # Speaker count threshold for switching to LARGE profile in AUTO mode
+  large_profile_threshold: 5
+
+# Automatic Speech Recognition (ASR) configuration
+asr:
+  # Engine selection:
+  #   auto        — route by DETECTED LANGUAGE MIX (2026-04-23 rewrite).
+  #                 A Whisper-tiny pre-pass measures EN probability on
+  #                 3 × 30s windows of the preprocessed audio:
+  #                   EN prob >= english_threshold -> whisper
+  #                     (faster-whisper base large-v3, same as EPAM IT)
+  #                   otherwise -> gigaam (SOTA Russian)
+  #                 MeetingType no longer drives ASR — it stays bound to
+  #                 prompt + DOCX template only.
+  #   gigaam      — force GigaAM v3 for every meeting (skips detection)
+  #   hf-whisper  — force antony66/whisper-large-v3-russian via HF transformers
+  #   whisper     — force faster-whisper base large-v3 (CTranslate2)
+  #   whisperx    — Whisper + wav2vec2 forced alignment (T3.6 pilot,
+  #                 optional dep, NEVER auto-routed; install with
+  #                 `pip install whisperx`)
+  #   qwen        — Qwen3-ASR (parked, rejected)
+  #   nemo        — NVIDIA NeMo (Linux only)
+  engine: "auto"
+  # English-probability threshold for "auto" routing. Value is the avg
+  # EN probability across sampled windows required to flip the decision
+  # to multilingual Whisper. Raised from 0.20 to 0.50 on 2026-04-23
+  # after a Russian-primary admin meeting with a few English terms
+  # tripped the old threshold and routed to base Whisper large-v3,
+  # which produced a noisy transcript and a blank protocol. Base
+  # multilingual Whisper underperforms GigaAM on Russian, so we only
+  # switch engines for genuinely English-majority audio now.
+  english_threshold: 0.50
+  # NeMo model for Russian speech recognition (Linux)
+  model: "nvidia/stt_ru_conformer_transducer_large"
+  # Whisper model: standard name or HuggingFace repo path (Tier 2 fallback)
+  # Russian fine-tune of large-v3: WER 9.84% -> 6.39% on Russian benchmarks
+  whisper_model: "large-v3"
+  # Qwen3-ASR model (Tier 1 SOTA): outperforms Whisper large-v3 on Russian benchmarks
+  qwen_model: "Qwen/Qwen3-ASR-1.7B"
+  # Qwen3-ForcedAligner for word-level timestamps (loaded alongside ASR model)
+  qwen_aligner_model: "Qwen/Qwen3-ForcedAligner-0.6B"
+  # GigaAM longform batch size. This affects speed/VRAM only, not recognition
+  # quality. RTX 3090 target value is 16. If another GPU-heavy app is open and
+  # VRAM is insufficient, VERITAS should stop with a clear error instead of
+  # silently changing the processing mode.
+  gigaam_batch_size: 16
+  gigaam_min_batch_size: 1
+  gigaam_retry_smaller_batch: false
+  # Device: auto (auto-detect), cuda, cpu, cuda:0 (specific GPU)
+  device: "auto"
+  # Compute precision: float16 (GPU recommended), int8_float32 (CPU), float32
+  compute_type: "float16"
+  # Language code (ru for Russian)
+  language: "ru"
+  # Beam search width for decoding (higher = more accurate but slower)
+  beam_size: 1
+  # Chunk duration for streaming processing (seconds)
+  chunk_duration: 30.0
+  # Voice Activity Detection (VAD) threshold (0.0-1.0).
+  # 2026-04-23: lowered 0.5 -> 0.4 after stakeholder review found 76
+  # phrase/clause completion edits (59% of all edits) where ASR cut
+  # mid-utterance. A lower threshold treats softer/quieter speech as
+  # speech instead of silence, recovering clause endings the previous
+  # 0.5 setting clipped.
+  vad_threshold: 0.4
+  # Minimum speech duration for segment (milliseconds)
+  vad_min_speech_ms: 250
+  # Minimum silence duration for segment break (milliseconds).
+  # 2026-04-23: raised 100 -> 350. Brief breaths and natural pauses
+  # were getting cut as segment boundaries, dropping content. 350 ms
+  # only breaks on real speaker-change-sized gaps.
+  vad_min_silence_ms: 350
+  # Domain vocabulary hint for Whisper (improves legal terminology recognition)
+  # initial_prompt: Set in config.py default (Cyrillic Russian).
+  # Whisper uses this as language/domain hint. Do not override with Latin text.
+  # Use previous chunk text as context for next chunk (improves consistency)
+  condition_on_previous_text: false
+  # Whisper no-speech probability threshold (segments above this are skipped)
+  no_speech_threshold: 0.6
+  # Whisper compression ratio threshold (detects hallucinated repetitions)
+  compression_ratio_threshold: 2.4
+
+# Speaker diarization configuration
+diarization:
+  # Engine: pyannote only. VERITAS should fail clearly if pyannote
+  # cannot run; it must not silently fall back to lower-quality diarization.
+  engine: "pyannote"
+  # Legacy field kept for config compatibility; ignored by pyannote.
+  embedding_model: ""
+  # pyannote model: community-1 uses VBx clustering, state-of-the-art DER
+  pyannote_model: "pyannote/speaker-diarization-community-1"
+  # Clustering algorithm: spectral (fast, GPU-friendly) or agglomerative (accurate)
+  clustering: "spectral"
+  # Minimum expected speakers
+  min_speakers: 2
+  # Maximum expected speakers (prevents over-clustering)
+  max_speakers: 20
+  # Speaker identification threshold (0.0-1.0)
+  identification_threshold: 0.75
+  # Minimum segment duration for speaker detection (seconds)
+  min_segment_duration: 0.5
+  # Sliding window duration for embedding extraction (seconds)
+  window_duration: 1.0
+  # Sliding window step (seconds) — smaller = finer speaker granularity
+  # 0.5 is needed for overlapping speech in multi-speaker meetings
+  step_duration: 0.5
+  # HuggingFace token for model downloads (set via HF_TOKEN env var)
+  hf_token: null
+  # ----- Court hearing-specific overrides (Sprint 2026-04-30) ------
+  # Court hearings have multiple same-gender lawyers whose voices
+  # VBx clustering merges into one cluster (e.g. court_hearing_129
+  # produced 59/33/8 split where two lawyers should have been ~35/35).
+  # These knobs apply ONLY when meeting_type == "court_hearing"; other
+  # meeting types use the standard fields above.
+  # Override via env: EPAM_DIARIZATION_COURT_HEARING_*.
+  court_hearing_min_segment_duration: 0.2
+  # pyannote 4.0 community-1 clustering.threshold override.
+  # null = use pretrained default (~0.7); lower = more aggressive
+  # cluster splitting (less merging of similar voices). 0.55 is the
+  # calibration target on court_hearing_129.
+  court_hearing_clustering_threshold: 0.55
+  # pyannote 4.0 community-1 segmentation.min_duration_off override.
+  # null = use pipeline default (0.0); >0 forces silence-based turn
+  # breaks (useful for fast-paced cross-examination).
+  court_hearing_segmentation_min_duration_off: null
+
+# Text summarization configuration (Ollama HTTP API)
+summarization:
+  # Set false for transcript-only output (no LLM, saves VRAM and time)
+  enabled: true
+  # Ollama API base URL (Ollama must be running as a separate service)
+  ollama_base_url: "http://localhost:11434"
+  # Ollama model tag. Default: Gemma 4 26B MoE (~16GB VRAM, 128K context,
+  # single-pass summarization). Matches EPAM IT team's production choice
+  # as of 2026-04-23 — they confirmed it produces acceptable Russian
+  # administrative protocols when paired with the strict-schema prompt
+  # in backend/engine/protocols/administrative.py.
+  # Fallbacks: "t-tech/T-pro-it-2.0:q4_K_M" (Russian-tokenizer, 32K context;
+  # disabled because hallucinations observed 2026-04-22 on admin meeting),
+  # "qwen3:32b" (multilingual).
+  # Switch model by changing this value only — no code changes needed.
+  # Pull with: ollama pull gemma4:26b
+  ollama_model: "gemma4:26b"
+  # HTTP timeout in seconds (LLM may need 2-5 minutes for long transcripts)
+  ollama_timeout: 300
+  # Ollama does not automatically use the model's full context.
+  # "auto" chooses 64K / 128K / 256K from the prompt size and caps
+  # at the model metadata limit when available.
+  # Use "max" to request the largest allowed context, or a number
+  # like "131072" to force a fixed context.
+  ollama_num_ctx: "auto"
+  ollama_num_ctx_auto_min: 65536
+  ollama_num_ctx_auto_max: 262144
+  # Maximum new tokens to generate per regular call
+  max_new_tokens: 8192
+  # Admin protocols need a larger answer budget because a good output
+  # can contain many decisions, tasks, risks, and evidence quotes.
+  admin_max_new_tokens: 12288
+  # Force admin extraction to valid JSON via Ollama structured outputs.
+  structured_outputs: true
+  # Recall pass for administrative meetings. If the primary single-pass
+  # extraction returns too few practical items for a long meeting, VERITAS
+  # asks Gemma to re-scan chronological windows and merges non-duplicates.
+  admin_recall_pass: true
+  admin_recall_min_items_per_hour: 15
+  admin_recall_window_minutes: 12
+  admin_recall_max_windows: 12
+  # Max extracted text from supporting context files per upload.
+  context_file_max_chars: 20000
+  # Generation temperature (0.0-1.0, lower = more deterministic/factual)
+  # 0.1 is near-greedy — tightened 2026-04-17 for anti-hallucination in T-Pro 2.0
+  temperature: 0.1
+  # Top-p (nucleus) sampling — 0.80 narrows token distribution for factuality
+  top_p: 0.80
+  # T3.5 (2026-04-23): polish pass over admin protocol JSON before
+  # DOCX render. Format-only edits, validation gates reject factual
+  # changes. Adds ~30s to admin runs. Default OFF — flip to true to
+  # enable for admin meetings only.
+  polish_pass: false
+  # Map-reduce topic-segmented admin protocol.
+  # 2026-05-04: DISABLED BY DEFAULT. Industry practice for meetings
+  # <2 hours that fit in 128K context is single-pass — fragmenting
+  # the transcript into topic blocks loses cross-topic reasoning and
+  # produces empty blocks when a topic's content was discussed in
+  # passing within another topic. Otter, Fireflies, Notion AI,
+  # Microsoft Teams, Anthropic Meeting Scribe are all single-pass.
+  # Set true to opt-in for very long (3+ hour) meetings.
+  use_topic_segmented_admin: false
+
+# Quality assurance and validation
+quality:
+  # Minimum confidence score for transcript acceptance (0.0-1.0)
+  min_confidence: 0.6
+  # Enable hallucination detection in generated content
+  hallucination_check: true
+  # Maximum repeat length to detect redundancy (characters)
+  # NOTE: Must be >50 for hallucination detection loop to work (range starts at 50)
+  max_repeat_length: 100
+  # Number of retries on failure before giving up
+  retry_count: 2
+  # Minimum audio duration for processing (seconds)
+  min_audio_duration: 10.0
+  # Maximum audio duration for processing (seconds) — 7200 = 2 hours
+  max_audio_duration: 7200.0
+
+# Output formatting
+output:
+  # Output format: docx (recommended), pdf, md (markdown), json
+  format: "docx"
+  # Branding preset: epam, minimal, custom
+  branding: "epam"
+  # Output directory for generated files
+  output_dir: "data/meetings"
+
+# Backup of completed meeting protocols (Sprint 2026-04-30).
+# After a meeting reaches COMPLETED state, the orchestrator copies
+# DOCX, JSON protocol, and aligned transcript to a month-grouped folder
+# under backup_dir. Replaces the legacy daily-grouped data/archive/
+# layout — that one created a folder per day, which became hard to
+# browse on a busy machine.
+backup:
+  # Master toggle — disable in test environments or when host-level
+  # backup (Veeam/Acronis) handles this responsibility.
+  enabled: true
+  # Backup root. Sibling of output.output_dir by default.
+  # Override via EPAM_BACKUP_BACKUP_DIR for shared network storage.
+  backup_dir: "data/backups"
+  # Retention in days. null = keep forever (recommended for law firm —
+  # protocols are valuable, disk is cheap). Positive int = prune older
+  # folders after each successful run.
+  retention_days: null
+
+# EPAM branding
+branding:
+  # Primary brand color (EPAM red)
+  primary_color: "#B2001F"
+  # Secondary color
+  secondary_color: "#333333"
+  # Font for headings in documents
+  heading_font: "Georgia"
+  # Font for body text in documents
+  body_font: "Arial Narrow"
+  # Path to EPAM logo (optional, set to file path if custom logo needed)
+  logo_path: null
+
+# Post-processing configuration
+# Benchmark on court_hearing_129 (2026-04-20): GigaAM native punctuation scored
+# 73.2% F1 against gold; deepmultilingualpunctuation 53.7%; Silero 39.9%.
+# DMP is a REGRESSION when used on top of GigaAM/antony66 — leave off unless
+# your ASR engine drops punctuation.
+postprocessing:
+  # Run deepmultilingualpunctuation on each segment (CPU, ~300 MB model).
+  # Leave false for GigaAM / antony66 — they punctuate natively and better.
+  restore_punctuation: false
+  # Strip filler words ("ну", "вот", "uh", "um", …)
+  remove_fillers: true
+  # Collapse Whisper-style repeated phrase hallucinations
+  remove_repetitions: true
+  # Capitalize the first word after .!?
+  capitalize_sentences: true
+  # Convert spelled-out Russian numerals to digits via text2num.
+  # DEFAULT FALSE (2026-04-23 second pass): text2num.alpha2digit
+  # is too aggressive for Russian legal speech. It fragments ordinals
+  # ("двадцать пятого" -> "20 пятого"), and converts standalone
+  # narrative "миллион" -> "1 000 000" even when used as a noun.
+  # Reference baseline had zero such artifacts; text2num introduced
+  # 23+ new ones in 60 min of audio. Will revisit with a narrower
+  # currency-anchored normalizer in Tier 3.
+  normalize_numbers: false
+  # Strip short segments that match Whisper hallucination patterns:
+  # stray "22:14 ..." timecode artifacts at chunk boundaries, leftover
+  # YouTube training phrases ("Спасибо за просмотр", "Subscribe").
+  # Conservative; only fires on segments <=30 chars. Added Tier 2 2026-04-23.
+  filter_hallucinations: true
+  # T3.4 (2026-04-23): opt-in LLM post-correction pass over aligned
+  # transcript. Runs Gemma 4 over batches of ~4000 chars with strict
+  # "fix only obvious ASR errors, never paraphrase" prompt. Adds
+  # ~1 min of latency on a 60-min meeting. DEFAULT OFF — flip to true
+  # to enable. Validation rejects batches that change turn count,
+  # speakers, or paraphrase below 70% Jaccard overlap.
+  llm_correction: false
+  llm_correction_min_overlap: 0.70
+  llm_correction_chunk_chars: 4000
+
+# Security settings (Block 4)
+security:
+  # Encrypt audio and transcript files at rest (AES-256-GCM)
+  # Requires EPAM_ENCRYPTION_SECRET_KEY env var to be set
+  encryption_enabled: true
+  # Write structured audit logs for all security-relevant events
+  audit_enabled: true
+  # Directory for audit log files (JSONL format)
+  audit_log_dir: "data/audit"
+  # Automatically remove intermediate files after processing
+  auto_cleanup: true
+  # Hours to retain completed meeting data before full cleanup (720 = 30 days)
+  retention_hours: 720
+  # Securely overwrite files before deletion (random data + unlink)
+  secure_delete: true
+  # Production CORS origins (overrides server.cors_origins when set)
+  # Set to your actual frontend URL in production
+  cors_production_origins: []
+  # Disabled by default: this sends transcript content to an external
+  # Claude API and breaks the normal on-premise privacy boundary.
+  cloud_compare_enabled: false

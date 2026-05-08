@@ -1,0 +1,30 @@
+# Normalize line endings to LF on commit, checkout as native
+* text=auto
+
+# Force LF for source files
+*.py text eol=lf
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.css text eol=lf
+*.html text eol=lf
+
+# Force CRLF for Windows scripts
+*.bat text eol=crlf
+
+# Binary files
+*.gguf binary
+*.wav binary
+*.mp3 binary
+*.m4a binary
+*.flac binary
+*.ogg binary
+*.docx binary
+*.xlsx binary
+*.pdf binary
+*.png binary
+*.jpg binary

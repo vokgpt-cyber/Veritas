@@ -1,0 +1,12 @@
+# Optional local ASR vocabulary hints.
+#
+# Copy this file to config/hot_words.yaml and fill it with local employee
+# names, client names, addresses, and legal terms. The real file is ignored
+# by Git because it can contain confidential matter names and personal data.
+
+employees: []
+counterparties: []
+clients: []
+addresses: []
+legal_terms: []
+finance: []
