@@ -1,0 +1,124 @@
+# EPAM VERITAS - Dependencies (pinned for reproducibility)
+# Verbal Intelligence, Transcription and Summarization v2.0
+# Last audited: 2026-04-22 (post-DiariZen drop + CUDA cascade hardening)
+# All packages from trusted sources (PyPI, NVIDIA, HuggingFace)
+
+# CUDA torch wheels — pulled from PyTorch's index, not PyPI default (which is CPU-only)
+--extra-index-url https://download.pytorch.org/whl/cu126
+
+# Core Web Framework
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.5
+pydantic-settings==2.7.1
+python-multipart==0.0.20
+websockets==14.2
+httpx==0.28.1
+PyYAML==6.0.2
+
+# PyTorch stack — explicit CUDA wheels, must match across torch/vision/audio
+# If pip pulls "+cpu" instead of "+cu126", the --extra-index-url above is being ignored.
+torch==2.8.0+cu126
+torchvision==0.23.0+cu126
+torchaudio==2.8.0+cu126
+
+# Audio Processing
+librosa>=0.10.2
+soundfile==0.13.1
+
+# ML - ASR
+# GigaAM v3_e2e_rnnt (default for Russian court hearings) is installed by
+# REBUILD_VENV.bat Step 5 DIRECTLY FROM GITHUB — it is NOT listed here.
+# Reason: PyPI 'gigaam 0.1.0' pins `torch<=2.5.1` which conflicts with our
+# `torch==2.8.0+cu126` and breaks the pip resolver. GitHub install uses
+# `--no-deps` so it ignores the bad pin. PyPI gigaam also only has v1/v2
+# models; v3_e2e_rnnt only exists on GitHub main. Do NOT re-add here.
+# Install command (run after requirements.txt):
+#   pip install --force-reinstall --no-deps https://github.com/salute-developers/GigaAM/archive/refs/heads/main.zip
+# GigaAM's own runtime deps (hydra-core, omegaconf) must be pre-installed here
+# because its GitHub install uses --no-deps. hydra-core pulls omegaconf
+# transitively, so listing hydra-core alone is sufficient.
+hydra-core>=1.3,<2.0
+faster-whisper==1.1.0  # Tier 3 fallback: Whisper large-v3 via CTranslate2
+sentencepiece==0.2.0  # Required by GigaAM RNNT decoder
+# Tier 1 Whisper (antony66/whisper-large-v3-russian) loaded via HF transformers — no extra package needed
+# nemo_toolkit[asr]==2.2.0  # Linux only, uncomment if deploying on Linux
+
+# ML - Diarization
+pyannote.audio>=4.0,<5.0  # Production: pyannote 4.0 community-1 (VBx clustering)
+scikit-learn==1.6.1
+
+# Lightning — pyannote uses the unified 'lightning' package.
+# DO NOT also install 'pytorch-lightning' — having both causes torch kernel registration conflict
+# (RuntimeError: kernel already registered for wait_tensor / _c10d_functional namespace).
+# Tightened to >=2.4 to match pyannote-audio 4.0's transitive pin exactly. With
+# the wider >=2.0 range pip's resolver backtracks to Lightning 2.3.3 (doesn't
+# satisfy pyannote's >=2.4) and fails with "no matching distributions available
+# for your environment: Lightning". Observed 2026-04-22 REBUILD_VENV run.
+lightning>=2.4,<3.0
+
+# torchmetrics — pyannote.audio pulls it transitively. torchmetrics 1.9.0 (released
+# shortly before 2026-04-22) pins lightning-utilities>=0.15.3 while lightning 2.4.0
+# pins lightning-utilities<2.0,>=0.10.0. The ranges DO intersect (0.15.3–1.x), but
+# pip's resolver bails with "no matching distributions available for your
+# environment: lightning-utilities" because something else in the 1.9.0 dep tree
+# collides with the Lightning 2.4 branch. Cap torchmetrics below 1.9 — 1.8.x is
+# known-good with lightning 2.4 + pyannote-audio 4.0. Observed 2026-04-22 second
+# REBUILD_VENV run.
+torchmetrics>=1.4,<1.9
+
+# Transformers + huggingface-hub — version skew is a known trap.
+# transformers requires huggingface-hub<1.0. Unpinned pip resolves to 1.11+ which breaks transformers import.
+transformers>=4.57.0,<5.0
+huggingface-hub>=0.34.0,<1.0
+
+# NOT INSTALLED (on purpose): torchcodec
+# torchcodec 0.7+ crashes on Windows + torch 2.8 with DLL error (aoti_torch_aten_narrow not found
+# in libtorchcodec_core7.dll). pyannote 4.0 imports torchcodec at module level but fails silently,
+# which is fine: the engine pre-loads audio via torchaudio and passes {"waveform", "sample_rate"} dict.
+# If torchcodec appears in the venv (some transitive pull), uninstall it: pip uninstall torchcodec -y
+
+# ML - Summarization (Ollama HTTP API — no Python ML dependencies needed)
+# Ollama runs as a separate service: https://ollama.com
+# Pull models: ollama pull gemma4:26b  (default, 128K context, single-pass)
+#              ollama pull t-tech/T-pro-it-2.0:q4_K_M  (Russian-optimized fallback)
+# httpx (already in Core Web Framework) handles HTTP calls to Ollama
+
+# Document Generation & Context File Parsing
+python-docx==1.1.2
+openpyxl==3.1.5
+PyPDF2==3.0.1
+
+# GPU Monitoring
+nvidia-ml-py3==7.352.0
+
+# System monitoring — CPU/RAM metrics for /api/system endpoint.
+# Imported at module load time in backend/app/routes/system.py; the backend
+# fails to start if psutil is missing. Not transitively pulled by any other
+# dep, must be listed explicitly.
+psutil>=5.9,<7.0
+
+# Text Post-processing
+deepmultilingualpunctuation==1.0.1  # CPU-based, currently OFF in config (benchmark showed regression on GigaAM)
+
+# Russian number-words → digits normalisation. Tiny pure-Python lib,
+# MIT, used in postprocessor.normalize_russian_numbers() to convert
+# spelled-out amounts ("шесть миллионов рублей" → "6 000 000 рублей").
+# Added 2026-04-23 after stakeholder review of court_hearing_129
+# flagged 6 number/date edits in 10 minutes of audio.
+text2num>=2.4,<3.0
+
+# Benchmarking — WER/CER scoring against gold transcripts. Used by
+# benchmarks/scripts/score_wer.py and the ASR engine comparison
+# harness (compare_asr_engines.py). Pure Python, small, MIT/Apache.
+jiwer>=4.0,<5.0
+rapidfuzz>=3.0,<4.0
+
+# Utilities
+numpy>=1.26.4
+aiofiles==24.1.0
+
+# Security
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+cryptography==44.0.0

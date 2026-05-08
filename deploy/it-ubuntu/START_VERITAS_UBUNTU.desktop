@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Start VERITAS 1.0 Server
+Comment=Start EPAM VERITAS on an Ubuntu GPU server
+Exec=sh -c 'cd "$(dirname "%k")" && chmod +x START_VERITAS_UBUNTU.sh STOP_VERITAS_UBUNTU.sh && ./START_VERITAS_UBUNTU.sh'
+Terminal=true
+Icon=utilities-terminal
+Categories=Utility;

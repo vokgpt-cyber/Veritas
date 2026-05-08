@@ -1,0 +1,135 @@
+name: veritas
+
+services:
+  backend:
+    image: epam-veritas-backend:${VERITAS_IMAGE_TAG:-1.0}
+    container_name: veritas-backend
+    build:
+      context: ../..
+      dockerfile: Dockerfile
+    gpus: all
+    shm_size: "2gb"
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "${NVIDIA_VISIBLE_DEVICES:-all}"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
+      CUDA_VISIBLE_DEVICES: "${CUDA_VISIBLE_DEVICES:-0}"
+      HF_HOME: "/home/veritas/.cache/huggingface"
+      TORCH_HOME: "/home/veritas/.cache/torch"
+      XDG_CACHE_HOME: "/home/veritas/.cache"
+      EPAM_DATA_ROOT: "/app"
+      EPAM_SHARED_DATA_ROOT: "/app/shared-data"
+      EPAM_AUTH_SECRET_KEY: "${EPAM_AUTH_SECRET_KEY}"
+      EPAM_ENCRYPTION_SECRET_KEY: "${EPAM_ENCRYPTION_SECRET_KEY}"
+      EPAM_BACKEND_PORT: "8000"
+      EPAM_SERVER_HOST: "0.0.0.0"
+      EPAM_SERVER_PORT: "8000"
+      EPAM_SUMMARIZATION_PROVIDER: "${EPAM_SUMMARIZATION_PROVIDER:-openai_compatible}"
+      EPAM_SUMMARIZATION_OPENAI_BASE_URL: "${EPAM_SUMMARIZATION_OPENAI_BASE_URL:-http://vllm:8000/v1}"
+      EPAM_SUMMARIZATION_OPENAI_API_KEY: "${EPAM_SUMMARIZATION_OPENAI_API_KEY:-}"
+      EPAM_SUMMARIZATION_OLLAMA_BASE_URL: "${EPAM_SUMMARIZATION_OLLAMA_BASE_URL:-http://host.docker.internal:11434}"
+      EPAM_SUMMARIZATION_OLLAMA_MODEL: "${EPAM_SUMMARIZATION_OLLAMA_MODEL:-Qwen/Qwen3.6-27B}"
+      HF_TOKEN: "${HF_TOKEN:-}"
+      HF_HUB_OFFLINE: "${HF_HUB_OFFLINE:-0}"
+      TRANSFORMERS_OFFLINE: "${TRANSFORMERS_OFFLINE:-0}"
+      HF_DATASETS_OFFLINE: "${HF_DATASETS_OFFLINE:-0}"
+      PYANNOTE_METRICS_ENABLED: "${PYANNOTE_METRICS_ENABLED:-0}"
+      PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
+      VERITAS_GPU_VRAM_BUDGET_GB: "${VERITAS_GPU_VRAM_BUDGET_GB:-30}"
+      VERITAS_DISABLE_QUALITY_FALLBACKS: "${VERITAS_DISABLE_QUALITY_FALLBACKS:-true}"
+    ports:
+      - "${EPAM_BACKEND_BIND:-127.0.0.1}:${EPAM_BACKEND_PORT:-8765}:8000"
+    volumes:
+      - veritas-data:/app/data
+      - veritas-shared-data:/app/shared-data
+      - veritas-hf-cache:/home/veritas/.cache/huggingface
+      - veritas-torch-cache:/home/veritas/.cache/torch
+      - veritas-ct2-cache:/home/veritas/.cache/ctranslate2
+      - ../../config:/app/config:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    restart: unless-stopped
+    networks:
+      - veritas-net
+
+  frontend:
+    image: epam-veritas-frontend:${VERITAS_IMAGE_TAG:-1.0}
+    container_name: veritas-frontend
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    environment:
+      EPAM_FRONTEND_PORT: "5173"
+      EPAM_BACKEND_HOST: "backend"
+      EPAM_BACKEND_PORT: "8000"
+    ports:
+      - "${EPAM_FRONTEND_BIND:-0.0.0.0}:${EPAM_FRONTEND_PORT:-5173}:5173"
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
+    networks:
+      - veritas-net
+
+  vllm:
+    profiles: ["vllm"]
+    image: "${VLLM_IMAGE:-vllm/vllm-openai:latest}"
+    container_name: veritas-vllm
+    ipc: host
+    gpus: all
+    shm_size: "8gb"
+    environment:
+      NVIDIA_VISIBLE_DEVICES: "${NVIDIA_VISIBLE_DEVICES:-all}"
+      NVIDIA_DRIVER_CAPABILITIES: "compute,utility"
+      CUDA_VISIBLE_DEVICES: "${CUDA_VISIBLE_DEVICES:-0}"
+      HF_TOKEN: "${HF_TOKEN:-}"
+      HF_HOME: "/root/.cache/huggingface"
+      TRANSFORMERS_OFFLINE: "${TRANSFORMERS_OFFLINE:-0}"
+      HF_HUB_OFFLINE: "${HF_HUB_OFFLINE:-0}"
+    command:
+      - "--model"
+      - "${VLLM_MODEL:-Qwen/Qwen3.6-27B}"
+      - "--served-model-name"
+      - "${VLLM_SERVED_MODEL_NAME:-Qwen/Qwen3.6-27B}"
+      - "--host"
+      - "0.0.0.0"
+      - "--port"
+      - "8000"
+      - "--tensor-parallel-size"
+      - "${VLLM_TENSOR_PARALLEL_SIZE:-1}"
+      - "--gpu-memory-utilization"
+      - "${VLLM_GPU_MEMORY_UTILIZATION:-0.62}"
+      - "--max-model-len"
+      - "${VLLM_MAX_MODEL_LEN:-65536}"
+      - "--dtype"
+      - "${VLLM_DTYPE:-auto}"
+      - "--trust-remote-code"
+    ports:
+      - "${VLLM_BIND:-127.0.0.1}:${VLLM_PORT:-8001}:8000"
+    volumes:
+      - veritas-hf-cache:/root/.cache/huggingface
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/v1/models', timeout=5)"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 300s
+    restart: unless-stopped
+    networks:
+      - veritas-net
+
+networks:
+  veritas-net:
+    driver: bridge
+
+volumes:
+  veritas-data:
+  veritas-shared-data:
+  veritas-hf-cache:
+  veritas-torch-cache:
+  veritas-ct2-cache:
