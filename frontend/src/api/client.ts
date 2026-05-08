@@ -2,7 +2,7 @@
  * HTTP client for VERITAS backend API.
  *
  * All requests include JWT token from localStorage when available.
- * The Vite dev server proxies /api and /ws to the backend at :8000.
+ * Local development and production Nginx both expose /api and /ws on this origin.
  */
 
 import type {

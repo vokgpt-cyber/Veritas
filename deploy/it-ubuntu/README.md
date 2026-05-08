@@ -1,95 +1,136 @@
-# VERITAS 1.0: Ubuntu Server Deployment
+# VERITAS 1.0 Ubuntu Server Deployment
 
-Эта папка предназначена для IT-развертывания VERITAS 1.0 на Ubuntu-сервере с
-NVIDIA GPU. Основной сценарий: RTX 4090 48 GB, Docker, pyannote Community-1,
-GigaAM, vLLM/OpenAI-compatible LLM.
+This folder is the server handoff package for EPAM IT. Target environment:
+Ubuntu 22.04/24.04 LTS, NVIDIA GPU, Docker, pyannote Community-1, GigaAM, and
+vLLM/OpenAI-compatible summarization.
 
-## Что находится в папке
+## Files
 
-- `docker-compose.server.yml` — серверный Docker Compose.
-- `server.env.example` — шаблон настроек сервера.
-- `START_VERITAS_UBUNTU.sh` — простой запуск.
-- `STOP_VERITAS_UBUNTU.sh` — остановка.
-- `START_VERITAS_UBUNTU.desktop` — запуск через GUI, если на сервере есть рабочий стол.
-- `MODEL_GUIDE.md` — рекомендуемые LLM и настройки VRAM.
-- `OPERATIONS_CHECKLIST.md` — короткий эксплуатационный чеклист для IT.
+- `docker-compose.server.yml` - hardened server Compose file.
+- `server.env.example` - example server environment.
+- `START_VERITAS_UBUNTU.sh` - build/start launcher.
+- `STOP_VERITAS_UBUNTU.sh` - stop launcher.
+- `START_VERITAS_UBUNTU.desktop` - optional GUI launcher.
+- `MODEL_GUIDE.md` - model and VRAM guide.
+- `OPERATIONS_CHECKLIST.md` - operating checklist.
+- `SECURITY_REVIEW.md` - required security checklist before pilot exposure.
 
-## Предварительные требования
+## Prerequisites
 
-На сервере должны быть установлены:
+Install on the server:
 
 1. Ubuntu 22.04/24.04 LTS.
-2. NVIDIA driver, проверяется командой `nvidia-smi`.
+2. NVIDIA driver, verified by `nvidia-smi`.
 3. Docker Engine.
 4. NVIDIA Container Toolkit.
-5. Доступ к Hugging Face для первой загрузки pyannote и vLLM-моделей.
+5. Git.
+6. Hugging Face read-token with accepted access to
+   `pyannote/speaker-diarization-community-1`.
 
-Для pyannote нужно принять условия модели:
-`pyannote/speaker-diarization-community-1`, затем создать read-token.
-
-## Получение кода из GitHub
-
-Репозиторий:
-
-```text
-https://github.com/vokgpt-cyber/Veritas
-```
-
-Первое получение:
+GPU check:
 
 ```bash
-git clone https://github.com/vokgpt-cyber/Veritas.git
+nvidia-smi
+docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu22.04 nvidia-smi
+```
+
+## Clone
+
+```bash
+git clone --branch release/veritas-1.0-it https://github.com/vokgpt-cyber/Veritas.git
 cd Veritas
 ```
 
-Если репозиторий закрытый, GitHub сначала должен дать доступ нужным IT-аккаунтам.
-
-Обновление уже установленной копии:
+For updates:
 
 ```bash
-cd Veritas
 git pull --ff-only
 ./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
 ```
 
-## Первый запуск
-
-Из корня репозитория:
+## First run
 
 ```bash
 chmod +x deploy/it-ubuntu/*.sh
 ./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
 ```
 
-Скрипт сам создаст `deploy/it-ubuntu/.env.server` с рандомными секретами.
-Перед первой реальной обработкой IT должен открыть `.env.server` и прописать:
+The launcher creates `deploy/it-ubuntu/.env.server` on first run, generates
+random auth/encryption secrets, and generates a one-time bootstrap admin
+password. It prints that password in the terminal.
+
+Before the first real run, edit:
+
+```bash
+nano deploy/it-ubuntu/.env.server
+```
+
+Set:
 
 ```bash
 HF_TOKEN=hf_...
 ```
 
-После запуска:
+Then restart:
 
-- локально на сервере: `http://localhost:5173`
-- по сети: `http://SERVER_IP:5173`
-- первичный вход: `admin / admin`
+```bash
+./deploy/it-ubuntu/STOP_VERITAS_UBUNTU.sh
+./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
+```
 
-Пароль администратора нужно сменить перед пилотом.
+## Network exposure
 
-## Запуск по двойному клику
+Default server package binds the web UI to localhost only:
 
-Если на Ubuntu-сервере есть графическая оболочка:
+```bash
+EPAM_FRONTEND_BIND=127.0.0.1
+EPAM_FRONTEND_PORT=5173
+```
 
-1. Откройте папку `deploy/it-ubuntu`.
-2. Разрешите запуск файлов как программ, если Ubuntu спросит.
-3. Запустите `START_VERITAS_UBUNTU.desktop`.
+Do not publish backend `8765` or vLLM `8001` to the LAN. To give users access,
+put the frontend behind an IT-approved reverse proxy, VPN, or firewall rule.
 
-На сервере без GUI используйте `START_VERITAS_UBUNTU.sh`.
+For non-local exposure, set a real admin password hash first:
 
-## GPU и VRAM
+```bash
+EPAM_AUTH_DEFAULT_PASSWORD_HASH=<bcrypt hash>
+EPAM_AUTH_DEFAULT_PASSWORD=
+```
 
-Важный момент: Docker на GeForce/RTX обычно не отрезает фиксированные 30 GB
-VRAM так же жестко, как обычную RAM. Для LLM это регулируется на уровне vLLM:
+If the launcher-generated temporary password is used for bootstrap, change it in
+the UI before pilot users get access.
+
+## Security gate
+
+Before pilot users:
+
+```bash
+docker compose --env-file deploy/it-ubuntu/.env.server \
+  -f deploy/it-ubuntu/docker-compose.server.yml config --quiet
+
+docker compose --env-file deploy/it-ubuntu/.env.server \
+  -f deploy/it-ubuntu/docker-compose.server.yml build
+
+docker scout cves epam-veritas-backend:1.0
+docker scout cves epam-veritas-frontend:1.0
+docker scout cves vllm/vllm-openai:v0.18.2
+```
+
+If Docker Scout is unavailable, use Trivy or Grype:
+
+```bash
+trivy image epam-veritas-backend:1.0
+trivy image epam-veritas-frontend:1.0
+trivy image vllm/vllm-openai:v0.18.2
+```
+
+Read `SECURITY_REVIEW.md` and record any accepted risks in the IT change ticket.
+
+## GPU and VRAM
+
+Docker exposes GPU access. On GeForce/RTX cards it usually does not hard-slice a
+fixed VRAM amount per container. For LLM, VERITAS controls the budget through
+vLLM:
 
 ```bash
 VERITAS_GPU_VRAM_BUDGET_GB=30
@@ -97,54 +138,18 @@ VLLM_GPU_MEMORY_UTILIZATION=0.62
 VLLM_MAX_MODEL_LEN=65536
 ```
 
-Для RTX 4090 48 GB:
+For RTX 4090 48 GB:
 
-- 30 GB budget примерно равно `0.62`.
-- 36 GB budget примерно равно `0.75`.
-- 40 GB budget примерно равно `0.83`.
+- 30 GB budget: `0.62`
+- 36 GB budget: `0.75`
+- 40 GB budget: `0.83`
 
-Если выбранная модель требует больше VRAM, чем выделено vLLM, она не должна
-стартовать. Это правильное поведение: лучше явная ошибка, чем скрытое снижение
-качества.
+If the chosen model needs more memory than allocated, it should fail clearly.
+Do not enable lower-quality fallback models just to complete the pipeline.
 
-Проверка текущей памяти GPU:
+## LLM selection
 
-```bash
-nvidia-smi
-```
-
-Формула для `VLLM_GPU_MEMORY_UTILIZATION`:
-
-```text
-нужный_бюджет_GB / общий_VRAM_GB
-```
-
-Примеры для RTX 4090 48 GB:
-
-```text
-30 GB / 48 GB = 0.62
-36 GB / 48 GB = 0.75
-40 GB / 48 GB = 0.83
-```
-
-Если IT хочет выделить VERITAS 30 GB под LLM, нужно поставить:
-
-```bash
-VERITAS_GPU_VRAM_BUDGET_GB=30
-VLLM_GPU_MEMORY_UTILIZATION=0.62
-```
-
-Если модель просит больше памяти, нужно выбрать один из трех честных вариантов:
-
-- увеличить `VLLM_GPU_MEMORY_UTILIZATION`;
-- уменьшить `VLLM_MAX_MODEL_LEN`;
-- выбрать более легкую модель.
-
-Не нужно включать скрытые fallback-модели или снижать качество pipeline.
-
-## Переключение LLM
-
-Базовый серверный режим использует vLLM:
+Default server mode uses vLLM:
 
 ```bash
 COMPOSE_PROFILES=vllm
@@ -155,80 +160,46 @@ VLLM_MODEL=Qwen/Qwen3.6-27B
 VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-27B
 ```
 
-Важно: в VERITAS 1.0 backend использует поле
-`EPAM_SUMMARIZATION_OLLAMA_MODEL` как имя активной модели и для Ollama, и для
-OpenAI-compatible vLLM. Поэтому при смене vLLM-модели меняйте оба поля:
+When changing the model, update all three model-name fields together. Use only
+approved model IDs from `MODEL_GUIDE.md` unless IT reviews an exception.
 
-```bash
-EPAM_SUMMARIZATION_OLLAMA_MODEL=Qwen/Qwen3.6-27B
-VLLM_MODEL=Qwen/Qwen3.6-27B
-VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-27B
-```
+Do not enable `--trust-remote-code` unless the exact model repository has been
+reviewed and pinned.
 
-После изменения модели:
+## Logs
 
-```bash
-./deploy/it-ubuntu/STOP_VERITAS_UBUNTU.sh
-./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
-```
-
-Проверка, что vLLM видит модель:
-
-```bash
-curl http://127.0.0.1:8001/v1/models
-```
-
-Для временного отключения vLLM и использования внешнего Ollama:
-
-```bash
-COMPOSE_PROFILES=
-EPAM_SUMMARIZATION_PROVIDER=ollama
-EPAM_SUMMARIZATION_OLLAMA_BASE_URL=http://host.docker.internal:11434
-EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b
-```
-
-## Обновление с GitHub
-
-Обычный порядок обновления:
-
-```bash
-git pull
-./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
-```
-
-Скрипт пересоберет backend/frontend images, не удаляя Docker volumes с данными,
-кэшами моделей и настройками.
-
-## Логи
+All services:
 
 ```bash
 docker compose --env-file deploy/it-ubuntu/.env.server \
   -f deploy/it-ubuntu/docker-compose.server.yml logs -f
 ```
 
-Логи vLLM:
-
-```bash
-docker logs -f veritas-vllm
-```
-
-Логи backend:
+Backend:
 
 ```bash
 docker logs -f veritas-backend
 ```
 
-## Остановка
+vLLM:
+
+```bash
+docker logs -f veritas-vllm
+```
+
+## Stop
 
 ```bash
 ./deploy/it-ubuntu/STOP_VERITAS_UBUNTU.sh
 ```
 
-Эта команда останавливает контейнеры, но не удаляет данные и кэши.
+This stops containers but keeps data, model caches, settings, and Docker
+volumes.
 
 ## Official references
 
 - Docker resource constraints: `https://docs.docker.com/engine/containers/resource_constraints/`
-- Docker GPU access: `https://docs.docker.com/desktop/features/gpu/`
+- Docker Compose services: `https://docs.docker.com/reference/compose-file/services/`
 - NVIDIA Container Toolkit: `https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/`
-- vLLM OpenAI-compatible server: `https://docs.vllm.ai/en/latest/serving/openai_compatible_server.html`
+- vLLM OpenAI-compatible server: `https://docs.vllm.ai/en/latest/serving/openai_compatible_server/`
+- OWASP Docker Security Cheat Sheet: `https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html`

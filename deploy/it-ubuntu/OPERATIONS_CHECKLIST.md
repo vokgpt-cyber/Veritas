@@ -4,12 +4,12 @@
 
 - Ubuntu 22.04/24.04 LTS installed.
 - NVIDIA driver installed.
-- `nvidia-smi` shows RTX 4090 and 48 GB VRAM.
+- `nvidia-smi` shows the RTX GPU and VRAM.
 - Docker Engine installed.
 - NVIDIA Container Toolkit installed.
 - Git installed.
 - IT GitHub account has access to `https://github.com/vokgpt-cyber/Veritas`.
-- Hugging Face token created.
+- Hugging Face read-token created.
 - Access to `pyannote/speaker-diarization-community-1` accepted.
 
 Useful checks:
@@ -24,7 +24,7 @@ docker run --rm --gpus all nvidia/cuda:12.8.0-base-ubuntu22.04 nvidia-smi
 ## 2. Clone and first run
 
 ```bash
-git clone https://github.com/vokgpt-cyber/Veritas.git
+git clone --branch release/veritas-1.0-it https://github.com/vokgpt-cyber/Veritas.git
 cd Veritas
 chmod +x deploy/it-ubuntu/*.sh
 ./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
@@ -49,7 +49,44 @@ Then restart:
 ./deploy/it-ubuntu/START_VERITAS_UBUNTU.sh
 ```
 
-## 3. VRAM allocation policy
+## 3. Security gate before pilot users
+
+- Read `deploy/it-ubuntu/SECURITY_REVIEW.md`.
+- Keep `EPAM_FRONTEND_BIND=127.0.0.1` until reverse proxy/VPN/firewall rules are
+  approved by IT.
+- Do not publish backend `8765` or vLLM `8001` to the LAN.
+- Change the bootstrap admin password before pilot use.
+- Prefer `EPAM_AUTH_DEFAULT_PASSWORD_HASH` before non-local exposure.
+- Keep `PYANNOTE_METRICS_ENABLED=0`.
+- Do not commit `.env.server`, tokens, audio, transcripts, generated DOCX/JSON,
+  audit logs, or model caches.
+- Do not use images with `:latest`.
+- Do not enable vLLM `--trust-remote-code` unless the exact model repository is
+  reviewed and pinned.
+
+Validate Compose and scan images:
+
+```bash
+docker compose --env-file deploy/it-ubuntu/.env.server \
+  -f deploy/it-ubuntu/docker-compose.server.yml config --quiet
+
+docker scout cves epam-veritas-backend:1.0
+docker scout cves epam-veritas-frontend:1.0
+docker scout cves vllm/vllm-openai:v0.18.2
+```
+
+Alternative scanner:
+
+```bash
+trivy image epam-veritas-backend:1.0
+trivy image epam-veritas-frontend:1.0
+trivy image vllm/vllm-openai:v0.18.2
+```
+
+Record any accepted vulnerabilities and compensating controls in the IT change
+ticket.
+
+## 4. VRAM allocation policy
 
 Docker exposes GPU access. On GeForce RTX cards it does not reliably hard-slice
 VRAM per container. VERITAS controls the LLM VRAM budget through vLLM:
@@ -71,11 +108,11 @@ If vLLM fails with out-of-memory:
 1. Confirm no other GPU-heavy process is running: `nvidia-smi`.
 2. Lower `VLLM_MAX_MODEL_LEN`.
 3. Lower model size.
-4. Increase `VLLM_GPU_MEMORY_UTILIZATION` only if the server has enough free VRAM.
+4. Increase `VLLM_GPU_MEMORY_UTILIZATION` only if enough VRAM is available.
 
 Do not switch VERITAS to a lower-quality fallback just to complete the run.
 
-## 4. LLM selection
+## 5. LLM selection
 
 Recommended first server model:
 
@@ -104,7 +141,7 @@ curl http://127.0.0.1:8001/v1/models
 docker logs -f veritas-vllm
 ```
 
-## 5. Updating VERITAS
+## 6. Updating VERITAS
 
 ```bash
 cd Veritas
@@ -118,9 +155,10 @@ The update rebuilds containers but keeps Docker volumes:
 - shared-data volume;
 - Hugging Face cache;
 - Torch cache;
-- CTranslate2 cache.
+- CTranslate2 cache;
+- vLLM cache.
 
-## 6. Logs and diagnostics
+## 7. Logs and diagnostics
 
 All services:
 
@@ -148,11 +186,3 @@ docker ps
 docker inspect -f '{{.State.Health.Status}}' veritas-backend
 docker inspect -f '{{.State.Health.Status}}' veritas-vllm
 ```
-
-## 7. Security reminders
-
-- Do not commit `deploy/it-ubuntu/.env.server`.
-- Do not commit audio, transcripts, generated DOCX, logs, or model cache files.
-- Change `admin / admin` before pilot use.
-- Keep `PYANNOTE_METRICS_ENABLED=0`.
-- Keep processing on-premise.

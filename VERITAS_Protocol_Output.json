@@ -1,0 +1,3328 @@
+{
+  "meeting_date": null,
+  "topic": "Brief title of the meeting and main discussion subject.",
+  "participants": [
+    {
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "speaking_time": 722.0300000000008,
+      "speaking_share": 43.8
+    },
+    {
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "speaking_time": 925.0199999999995,
+      "speaking_share": 56.2
+    }
+  ],
+  "summary": "Comprehensive 2-3 paragraph executive summary of the meeting.",
+  "key_topics": [
+    {
+      "title": "List of main discussion topics with brief descriptions.",
+      "content": "List of main discussion topics with brief descriptions.",
+      "speakers": []
+    }
+  ],
+  "decisions": [
+    {
+      "text": "List of decisions made during the meeting with responsible parties if mentioned.",
+      "responsible": null
+    }
+  ],
+  "tasks": [
+    {
+      "text": "AND ACTION ITEMS",
+      "assignee": null,
+      "deadline": null
+    },
+    {
+      "text": "List of tasks/action items with assignees and deadlines if mentioned.",
+      "assignee": null,
+      "deadline": null
+    }
+  ],
+  "open_questions": [
+    "List of unresolved questions or topics for future discussion.",
+    "IMPORTANT: Output MUST be in Russian language. Use clear formatting with section headers exactly as shown.",
+    "user",
+    "Please create the final consolidated meeting protocol from these chunk summaries:",
+    "system",
+    "You are a professional business meeting secretary specializing in creating detailed meeting protocols.",
+    "Your task is to extract and structure information from meeting transcripts.",
+    "Generate a meeting protocol with these sections:"
+  ],
+  "transcript": [
+    {
+      "start": 9.97,
+      "end": 11.09,
+      "text": "Добрый день, друзья.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9970703125
+    },
+    {
+      "start": 13.21,
+      "end": 18.86,
+      "text": "Абсолютно все, кто интересуется жизнью в России, прочитали такой текст.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9772303263346354
+    },
+    {
+      "start": 19.32,
+      "end": 20.16,
+      "text": "Цитата.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9921875
+    },
+    {
+      "start": 20.16,
+      "end": 23.56,
+      "text": "«Реальность такова, что дискриминация неминуемо наступит.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9835856119791666
+    },
+    {
+      "start": 23.68,
+      "end": 28.26,
+      "text": "Люди без иммунитета, люди без прививки не смогут работать на всех участках.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.996951633029514
+    },
+    {
+      "start": 28.36,
+      "end": 29.38,
+      "text": "Это невозможно.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.999755859375
+    },
+    {
+      "start": 29.54,
+      "end": 32.22,
+      "text": "Это будет представлять угрозу для окружающих».",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9998209635416666
+    },
+    {
+      "start": 32.5,
+      "end": 38.38,
+      "text": "Разные интерпретации этого высказывания породили необходимость встретиться",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9976050967261905
+    },
+    {
+      "start": 38.38,
+      "end": 43.06,
+      "text": "и обсудить на таком довольно подробном экспертном уровне,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9316406249999999
+    },
+    {
+      "start": 43.16,
+      "end": 50.66,
+      "text": "есть ли опасность в том, что в Москве ввели специальную систему графических кодов",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9974083533653846
+    },
+    {
+      "start": 50.66,
+      "end": 54.86,
+      "text": "для попадания в места еды.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.997607421875
+    },
+    {
+      "start": 55.54,
+      "end": 59.7,
+      "text": "Мы-то в Петербурге понимаем, что QR-код — это не проблема,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9447157118055557
+    },
+    {
+      "start": 59.92,
+      "end": 62.38,
+      "text": "и айтишники нарисуют его за несколько минут.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.999609375
+    },
+    {
+      "start": 62.52,
+      "end": 68.64,
+      "text": "Но поскольку мы законопослушные, мы все-таки решили поразмыслить коротко,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9843212890625
+    },
+    {
+      "start": 68.86,
+      "end": 73.32,
+      "text": "но вдумчиво, по поводу того, опасно это начинание",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9566396077473959
+    },
+    {
+      "start": 73.32,
+      "end": 79.0,
+      "text": "или оно проистекает из естественного развития ситуации в стране.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9542417173032409
+    },
+    {
+      "start": 79.36,
+      "end": 84.38,
+      "text": "И вот с моей коллегой мы этот вопрос очень подробно надеемся обсудить.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9904920789930555
+    },
+    {
+      "start": 85.0,
+      "end": 91.1,
+      "text": "Уверен, что будет вам интересно, потому что все-таки есть крайне радикальные взгляды на эту ситуацию.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9968668619791667
+    },
+    {
+      "start": 91.2,
+      "end": 94.86,
+      "text": "И, конечно, я считаю, что это высказывание, которое я процитировал,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9152099609375
+    },
+    {
+      "start": 94.88,
+      "end": 97.42,
+      "text": "нужно бы все-таки проверить на предмет.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9959542410714286
+    },
+    {
+      "start": 98.86,
+      "end": 103.32,
+      "text": "Соответствие диспозиции статьи 282 УК РФ не повредит.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9584706624348958
+    },
+    {
+      "start": 103.34,
+      "end": 106.82,
+      "text": "Во всяком случае, хотя бы для того, чтобы исключить такую квалификацию.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9993918678977273
+    },
+    {
+      "start": 108.12,
+      "end": 110.72,
+      "text": "Нужно вводить эти QR-коды или не нужно?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99749755859375
+    },
+    {
+      "start": 110.92,
+      "end": 112.46,
+      "text": "Как ты думаешь, моя дорогая коллега?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9991048177083334
+    },
+    {
+      "start": 113.1,
+      "end": 114.62,
+      "text": "Здравствуйте, уважаемые слушатели.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.993408203125
+    },
+    {
+      "start": 116.06,
+      "end": 118.62,
+      "text": "Действительно, тема очень животрепещущая.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9978434244791666
+    },
+    {
+      "start": 118.7,
+      "end": 122.86,
+      "text": "И ко мне как адвокату, и Евгении, вы не дадите соврать,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9457970821496212
+    },
+    {
+      "start": 122.88,
+      "end": 128.52,
+      "text": "что очень много запросов на эту тему приходит как от бизнеса, так и от обычных граждан.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.968292236328125
+    },
+    {
+      "start": 130.0,
+      "end": 132.16,
+      "text": "Действительно, нарушены ли наши права, или нет.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9591878255208333
+    },
+    {
+      "start": 132.6,
+      "end": 136.98,
+      "text": "И если мы сегодня будем говорить на экспертном уровне,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9535499855324076
+    },
+    {
+      "start": 137.06,
+      "end": 143.48,
+      "text": "я все-таки хочу начать о тех изменениях, которые мы наблюдаем уже с прошлого года, с апреля,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9827138863357843
+    },
+    {
+      "start": 143.56,
+      "end": 147.74,
+      "text": "когда произошла вот эта страшная ситуация, причем не только в нашей стране, но и во всем мире.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9941980698529411
+    },
+    {
+      "start": 148.1,
+      "end": 152.5,
+      "text": "И государства должны, просто были вынуждены принимать какие-то меры.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.97613525390625
+    },
+    {
+      "start": 152.92,
+      "end": 158.18,
+      "text": "И, на мой взгляд, самый основной момент, который, ну, вы, Евгения, конечно, знаете,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.97607421875
+    },
+    {
+      "start": 158.28,
+      "end": 159.02,
+      "text": "это о том, что",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9962158203125
+    },
+    {
+      "start": 159.02,
+      "end": 169.78,
+      "text": "в апреле были внесены изменения в закон федеральный о защите населения и территорий от чрезвычайных ситуаций природного и техногенного характера.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9393870035807291
+    },
+    {
+      "start": 169.8,
+      "end": 173.2,
+      "text": "Много было изменений, но самое основное, на мой взгляд, это то, что",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9881998697916666
+    },
+    {
+      "start": 174.14,
+      "end": 182.08,
+      "text": "были делегированы полномочия регионам, главам регионов, которые смогли уже выносить определенные нормативные акты,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.974308894230769
+    },
+    {
+      "start": 182.12,
+      "end": 186.32,
+      "text": "которые на местах уже вот внедряются сегодня, что мы сейчас и наблюдаем.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9178212483723959
+    },
+    {
+      "start": 186.6,
+      "end": 187.32,
+      "text": "И",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9912109375
+    },
+    {
+      "start": 189.21,
+      "end": 197.33,
+      "text": "если говорить по поводу QR-кодов, это, конечно, уже следствие того, что все эти работы, которые со стороны правительства происходят.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9348477045694986
+    },
+    {
+      "start": 197.47,
+      "end": 200.89,
+      "text": "Я, на самом деле, оптимист, я считаю, что все не так плохо.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9945068359375
+    },
+    {
+      "start": 201.13,
+      "end": 210.87,
+      "text": "И говорить о какой-то дискриминации, на мой взгляд, не совсем правильно, потому что есть определенные категории лиц, которые обязаны прививаться.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998709542410713
+    },
+    {
+      "start": 211.31,
+      "end": 213.83,
+      "text": "И как мы будем рассматривать этих людей?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9981689453125
+    },
+    {
+      "start": 213.97,
+      "end": 219.19,
+      "text": "То есть они изначально уже по праву некой выполняемой работы уже дискриминировались?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.967410617404514
+    },
+    {
+      "start": 219.21,
+      "end": 219.93,
+      "text": "Или они были предоставлены государством?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.3660225224494934
+    },
+    {
+      "start": 220.01,
+      "end": 230.33,
+      "text": "На мой взгляд, это неправильно, потому что государство обязано принимать меры для профилактики и для предотвращения вот этих распространений всех болезней.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9461306617373512
+    },
+    {
+      "start": 230.43,
+      "end": 242.55,
+      "text": "И федеральный закон имеется, который действует достаточно давно, и он является таким наследием советского периода об иммунопрофилактике инфекционной болезни.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9876374897203947
+    },
+    {
+      "start": 242.73,
+      "end": 246.97,
+      "text": "И существует два списка, два календаря прививок.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.998628162202381
+    },
+    {
+      "start": 246.97,
+      "end": 255.41,
+      "text": "И мы все являемся родителями, мы помним о том, что с рождения существует календарь прививок для детей, и все дети прививаются.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9873899429563492
+    },
+    {
+      "start": 255.51,
+      "end": 259.09,
+      "text": "Вот почему мы не ставим таким образом вопрос, что у нас дети изначально дискриминированы?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9387265159970238
+    },
+    {
+      "start": 259.75,
+      "end": 260.57,
+      "text": "Так нельзя говорить.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998372395833334
+    },
+    {
+      "start": 261.35,
+      "end": 268.21,
+      "text": "Никто никогда не говорит, что нужно принудительно прививаться, если имеется медотвод.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.999652284564394
+    },
+    {
+      "start": 268.67,
+      "end": 276.95,
+      "text": "То есть вот эта поправка и погрешность, которую сейчас и в Москве, и здесь, в Санкт-Петербурге должны быть привиты государственных учреждений,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9513309363162878
+    },
+    {
+      "start": 276.97,
+      "end": 284.65,
+      "text": "65% в Петербурге, в Москве 60%, то есть 40% все-таки допускается, что у людей может быть медотвод.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9085231526692708
+    },
+    {
+      "start": 285.07,
+      "end": 291.23,
+      "text": "Поэтому какой-то поголовной дискриминации просто не может быть, и нас защищает закон от этого.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9976627604166667
+    },
+    {
+      "start": 291.55,
+      "end": 305.23,
+      "text": "Тот же закон об иммунопрофилактике инфекционной болезни говорит о том, что у граждан имеется право, здесь очень много прав перечислено, и право отказаться от прививки.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9916676432291667
+    },
+    {
+      "start": 305.23,
+      "end": 311.23,
+      "text": "Но отказ должен быть составлен в письменной форме, и при этом возникают определенные последствия.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9789951869419643
+    },
+    {
+      "start": 311.31,
+      "end": 312.93,
+      "text": "Это тоже в законе все прописано.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9930013020833334
+    },
+    {
+      "start": 313.45,
+      "end": 318.83,
+      "text": "Именно отсутствие прививки влечет отстранение от работы там, где требуется прививка.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9859545158617425
+    },
+    {
+      "start": 319.05,
+      "end": 325.71,
+      "text": "Это запрет на въезд в определенные страны, а мы сейчас это наблюдаем, где требуются обязательные прививки.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9984842936197917
+    },
+    {
+      "start": 325.79,
+      "end": 333.57,
+      "text": "И причем, насколько мне известно, даже требуются тесты за несколько дней до въезда.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9864908854166667
+    },
+    {
+      "start": 333.57,
+      "end": 335.21,
+      "text": "И сюда въезжают на территорию, где требуется.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9004429408482143
+    },
+    {
+      "start": 335.23,
+      "end": 339.17,
+      "text": "И здесь уже на территории России также граждане обязаны проходить тест.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8939763849431818
+    },
+    {
+      "start": 339.65,
+      "end": 342.29,
+      "text": "Поэтому, пожалуйста, право выбора есть.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.999072265625
+    },
+    {
+      "start": 342.65,
+      "end": 348.21,
+      "text": "И так как преподносится эта информация сейчас в средствах массовой информации, на мой взгляд, неправильно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9952067057291667
+    },
+    {
+      "start": 348.25,
+      "end": 351.39,
+      "text": "Я все-таки за профилактику, за прививки.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9930013020833333
+    },
+    {
+      "start": 351.41,
+      "end": 363.25,
+      "text": "И да, я еще не сказала такой важный момент, что было не замечено, ну как-то это не освещалось очень широко в СМИ, что в календарь прививок, прививка от ковид была все-таки внесена.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9724647671568628
+    },
+    {
+      "start": 363.35,
+      "end": 365.21,
+      "text": "И мы, к сожалению, вот с вами, мы не знаем.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.82803955078125
+    },
+    {
+      "start": 365.23,
+      "end": 370.01,
+      "text": "Мы с вами собираемся уже постфактум, когда уже все случилось, и мы теперь начинаем это обсуждать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9071049213409423
+    },
+    {
+      "start": 370.13,
+      "end": 375.73,
+      "text": "А закон уже построен так, что, к сожалению, все выполнено законно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9973662405303031
+    },
+    {
+      "start": 375.77,
+      "end": 383.85,
+      "text": "То есть 3 февраля 2021 года были профилактические прививки по эпидемическим показаниям.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9582288953993054
+    },
+    {
+      "start": 383.85,
+      "end": 387.31,
+      "text": "Вот прививка против коронавирусной инфекции была внесена.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9748070126488094
+    },
+    {
+      "start": 388.13,
+      "end": 390.21,
+      "text": "Вот мы сейчас и наблюдаем результаты.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9943033854166666
+    },
+    {
+      "start": 390.21,
+      "end": 391.21,
+      "text": "Спасибо, Ирина.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9121500651041667
+    },
+    {
+      "start": 391.35,
+      "end": 392.47,
+      "text": "Мы на «ты».",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8544108072916666
+    },
+    {
+      "start": 392.47,
+      "end": 401.91,
+      "text": "Да. Вот сразу же ответили вы на, мы ответили на этот сложный вопрос, законно ли такое ограничение.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.97760009765625
+    },
+    {
+      "start": 402.47,
+      "end": 409.99,
+      "text": "Подчеркиваю, что преподнесение это как дискриминация, и мы вас будем дискриминировать, и дискриминация неминуемо наступит.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9960145399305557
+    },
+    {
+      "start": 410.33,
+      "end": 411.79,
+      "text": "Согласитесь, что это неверный подход.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.999365234375
+    },
+    {
+      "start": 411.85,
+      "end": 413.29,
+      "text": "Ну некорректно абсолютно сказано.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.90196533203125
+    },
+    {
+      "start": 413.39,
+      "end": 418.99,
+      "text": "Я бы сказал и рекомендую говорить так, что мы постараемся избежать дискриминации.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9983940972222222
+    },
+    {
+      "start": 419.03,
+      "end": 421.99,
+      "text": "И что это вовсе не дискриминация, что это настоятельная необходимость.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99392578125
+    },
+    {
+      "start": 421.99,
+      "end": 428.89,
+      "text": "И вот, друзья мои, когда мы размышляем на эту тему, или когда мы слушаем мыслителей на эту тему,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9878404405381944
+    },
+    {
+      "start": 428.99,
+      "end": 436.19,
+      "text": "мы всегда обязаны, вынуждены делить на несколько составляющих вот эту проблему коронавируса и вот этих ограничений.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9991607666015625
+    },
+    {
+      "start": 436.57,
+      "end": 439.21,
+      "text": "Первая проблема, она медицинская.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9996337890625
+    },
+    {
+      "start": 439.43,
+      "end": 446.87,
+      "text": "И, конечно, с точки зрения медицины, несмотря на то, что мы все все-таки в России все специалисты, но мы не очень глубокие специалисты,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.993560791015625
+    },
+    {
+      "start": 446.87,
+      "end": 451.29,
+      "text": "и мы тем не менее признаем, что необходимость прививок",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9078188295717591
+    },
+    {
+      "start": 451.29,
+      "end": 453.27,
+      "text": "позволяет обществу сохранить себя.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9766845703125
+    },
+    {
+      "start": 453.43,
+      "end": 460.07,
+      "text": "Потому что некоторые такие болезни, которые в позапрошлом веке косили миллионы населения,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9747300889756945
+    },
+    {
+      "start": 460.11,
+      "end": 462.13,
+      "text": "теперь они ушли только потому что прививки.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.931640625
+    },
+    {
+      "start": 462.21,
+      "end": 467.17,
+      "text": "И если у ребенка нет определенных прививок, его не возьмут в школу и так далее,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.974365234375
+    },
+    {
+      "start": 467.25,
+      "end": 472.41,
+      "text": "в какой-то момент наступит привычка к прививке от коронавируса, я вполне понимаю.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9976900540865384
+    },
+    {
+      "start": 472.63,
+      "end": 474.05,
+      "text": "Следующий аспект очень важный.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.98248291015625
+    },
+    {
+      "start": 474.19,
+      "end": 475.55,
+      "text": "Это бизнес аспект.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.936767578125
+    },
+    {
+      "start": 475.75,
+      "end": 481.27,
+      "text": "И вот бизнес аспект, я обращаю внимание на то, что в большинстве современных государств,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9941813151041667
+    },
+    {
+      "start": 481.27,
+      "end": 485.97,
+      "text": "Австрия, Италия, Эстония, даже Южная Корея,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8536724514431423
+    },
+    {
+      "start": 485.99,
+      "end": 490.79,
+      "text": "тесты, ПЦР-тесты или другие варианты тестов, они бесплатные.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9533962673611112
+    },
+    {
+      "start": 490.85,
+      "end": 494.99,
+      "text": "И вот это вот очень важно, что государство не наживается на своих гражданах.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.97412109375
+    },
+    {
+      "start": 495.43,
+      "end": 497.97,
+      "text": "Посмотрите, сколько себестоимость этого теста.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9693684895833332
+    },
+    {
+      "start": 498.01,
+      "end": 501.87,
+      "text": "Производители продают потребителям от 100 до 200 рублей.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9996337890625
+    },
+    {
+      "start": 502.03,
+      "end": 506.31,
+      "text": "Мы можем получить экспресс-тест за 2500 рублей.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9975992838541667
+    },
+    {
+      "start": 506.53,
+      "end": 511.17,
+      "text": "Таким образом, когда некто заявляет, что обязательно ПЦР-тест,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9978569878472222
+    },
+    {
+      "start": 511.27,
+      "end": 515.51,
+      "text": "если у вас нет QR-кода, то это означает, что этот субъект,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9150492350260416
+    },
+    {
+      "start": 515.53,
+      "end": 521.49,
+      "text": "может быть, исполнитель власти, он промоутирует наживу для тех людей,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9837972005208334
+    },
+    {
+      "start": 521.81,
+      "end": 524.41,
+      "text": "которые получают бенефит.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9849446614583334
+    },
+    {
+      "start": 524.43,
+      "end": 528.37,
+      "text": "Причем бенефит – это покруче, чем на расфасовке кокаина.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9144151475694444
+    },
+    {
+      "start": 528.87,
+      "end": 533.19,
+      "text": "Посмотрите, это 1000%, это 2000% прибыли.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9791434151785714
+    },
+    {
+      "start": 533.25,
+      "end": 539.27,
+      "text": "Вы просто сдайте ПЦР-тест, да, и мои аффилированные лица получат 2000 прибыли.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9610639523237179
+    },
+    {
+      "start": 539.85,
+      "end": 541.25,
+      "text": "Это что?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.97314453125
+    },
+    {
+      "start": 541.27,
+      "end": 547.77,
+      "text": "Я полагаю, что это нечестно по отношению к своим гражданам заставлять их сдавать ПЦР-тесты.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.943142361111111
+    },
+    {
+      "start": 547.85,
+      "end": 551.59,
+      "text": "И еще один момент, который резанул многих.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9764811197916667
+    },
+    {
+      "start": 551.77,
+      "end": 556.41,
+      "text": "Бизнес говорит, ну, представьте себе, Иван и Мария, они пекут пирожки.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9460079308712122
+    },
+    {
+      "start": 556.51,
+      "end": 559.79,
+      "text": "Вот в Петербурге очень много булочных, которые так и работают.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9846459960937499
+    },
+    {
+      "start": 559.83,
+      "end": 561.11,
+      "text": "Два, три, один человек.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.98779296875
+    },
+    {
+      "start": 562.02,
+      "end": 565.88,
+      "text": "Я наблюдал вчера по ТВ, по федеральным каналам,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.990997314453125
+    },
+    {
+      "start": 565.88,
+      "end": 570.94,
+      "text": "как один из, не буду называть его фамилии, но из авторитетных членов мэрии говорил,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9888802664620535
+    },
+    {
+      "start": 571.3,
+      "end": 576.86,
+      "text": "ну, а что такого-то, вы QR-код предъявляете охраннику, у вас же есть охранник.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9292995198567708
+    },
+    {
+      "start": 577.0,
+      "end": 578.38,
+      "text": "А у нас нет охранника.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99833984375
+    },
+    {
+      "start": 578.5,
+      "end": 586.24,
+      "text": "То есть, таким образом, вот этим шагом одновременно решается задача увеличения прибыли 2000%",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9660906110491071
+    },
+    {
+      "start": 586.98,
+      "end": 592.74,
+      "text": "для аффилированных людей, которые занимаются вот в этой сфере, и навязываются охранники.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9933098687065972
+    },
+    {
+      "start": 592.86,
+      "end": 594.72,
+      "text": "А кто такие охранники в современной России?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.950439453125
+    },
+    {
+      "start": 594.94,
+      "end": 597.08,
+      "text": "Это сотрудники силовых ведомств.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99981689453125
+    },
+    {
+      "start": 597.1,
+      "end": 599.62,
+      "text": "По разным причинам изгнанные из силовых ведомств.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9985177176339286
+    },
+    {
+      "start": 599.62,
+      "end": 605.76,
+      "text": "То есть, те люди, которые уже не могут работать со своими ксивами и с документами, и с пистолетом на боку,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9693766276041668
+    },
+    {
+      "start": 605.78,
+      "end": 607.66,
+      "text": "они вынуждены теперь идти в охрану.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9997287326388888
+    },
+    {
+      "start": 607.66,
+      "end": 610.42,
+      "text": "Таким образом, нам еще и охрану навязывают.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.992826915922619
+    },
+    {
+      "start": 610.82,
+      "end": 613.28,
+      "text": "Вот что это, Ирина, как так можно?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9601934523809523
+    },
+    {
+      "start": 616.94,
+      "end": 621.14,
+      "text": "Вы очень много сказали, я так понимаю, что глубоко в теме бизнеса.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9936930338541666
+    },
+    {
+      "start": 621.14,
+      "end": 623.42,
+      "text": "Но есть и другая сторона этого вопроса.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 1.0
+    },
+    {
+      "start": 623.74,
+      "end": 628.42,
+      "text": "Дело в том, что мы судим только по той информации, которую получаем извне.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998309795673077
+    },
+    {
+      "start": 628.42,
+      "end": 632.52,
+      "text": "И это самая большая проблема, на мой взгляд, вот того, что сейчас происходит.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9442232572115384
+    },
+    {
+      "start": 632.56,
+      "end": 634.66,
+      "text": "И среди бизнеса, и среди просто населения.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9946637834821429
+    },
+    {
+      "start": 635.18,
+      "end": 640.66,
+      "text": "Дело в том, что отсутствие достоверной и полной информации о вот этих прививках,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9993301782852565
+    },
+    {
+      "start": 640.7,
+      "end": 645.78,
+      "text": "о необходимости проведения ПЦР-тестов, оно вот и приводит к таким различным мнениям.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9986227964743589
+    },
+    {
+      "start": 646.82,
+      "end": 653.3,
+      "text": "Допустим, я периодически включаю первые каналы, не для того, чтобы вот сижу смотрю,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9944223257211539
+    },
+    {
+      "start": 653.34,
+      "end": 654.72,
+      "text": "а просто чтобы понимать, в каком направлении...",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9447195870535714
+    },
+    {
+      "start": 654.72,
+      "end": 655.08,
+      "text": "Не оправдывайтесь.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9080810546875
+    },
+    {
+      "start": 655.76,
+      "end": 656.98,
+      "text": "Я тоже так делаю.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9974365234375
+    },
+    {
+      "start": 657.22,
+      "end": 658.52,
+      "text": "Ну, в каком направлении движусь.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7781168619791667
+    },
+    {
+      "start": 658.54,
+      "end": 659.62,
+      "text": "Это, кажется, наше государство.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.80181884765625
+    },
+    {
+      "start": 659.74,
+      "end": 660.4,
+      "text": "Это прилично.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9915771484375
+    },
+    {
+      "start": 660.6,
+      "end": 662.0,
+      "text": "Это можно. Еще разрешено.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8426106770833333
+    },
+    {
+      "start": 662.0,
+      "end": 663.14,
+      "text": "Спасибо. Я сомневалась, да.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9873046875
+    },
+    {
+      "start": 663.5,
+      "end": 671.32,
+      "text": "И получается, что в одной передаче я слышу от авторитетных, ну, скажем так, не будем называть фамилии специалистов,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9767184787326388
+    },
+    {
+      "start": 671.32,
+      "end": 674.7,
+      "text": "которые говорят, да не нужен этот ПЦР-тест, идите и прививайтесь.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9986572265625
+    },
+    {
+      "start": 675.54,
+      "end": 681.62,
+      "text": "Переключаешь канал, такая же передача, там говорят, ПЦР-тест необходим, существуют случаи.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.991424560546875
+    },
+    {
+      "start": 681.66,
+      "end": 683.3,
+      "text": "То есть зачем все это происходит?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9701334635416666
+    },
+    {
+      "start": 683.68,
+      "end": 687.98,
+      "text": "Вот опять возвращаясь к закону об иммунопрофилактике инфекционной болезни,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.995667408130787
+    },
+    {
+      "start": 688.54,
+      "end": 693.34,
+      "text": "там четко сказано, что мы, помимо того, что имеем права, ну, различные другие,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9112830528846154
+    },
+    {
+      "start": 693.82,
+      "end": 701.1,
+      "text": "мы имеем право получения полной и объективной информации о необходимости, извините, профилактических прививок.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.999666967147436
+    },
+    {
+      "start": 701.14,
+      "end": 705.0,
+      "text": "Но там есть такая небольшая оговорочка от медицинских работников.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.998824508101852
+    },
+    {
+      "start": 705.5,
+      "end": 710.92,
+      "text": "Ну, вы можете себе представить ситуацию, когда мы приходим, да, платим за ПЦР-тест и говорим,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9816411336263021
+    },
+    {
+      "start": 710.92,
+      "end": 716.64,
+      "text": "уважаемые, там, я не знаю, кто медсестра, фельдшер, врач, вот, ну, скажите мне, пожалуйста, вот у меня такие большие сомнения,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9941105143229165
+    },
+    {
+      "start": 716.78,
+      "end": 717.74,
+      "text": "но он не психолог.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9896240234375
+    },
+    {
+      "start": 717.74,
+      "end": 720.06,
+      "text": "Ну, может быть, в какой-то части психолог.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8907012939453125
+    },
+    {
+      "start": 720.14,
+      "end": 721.66,
+      "text": "Не будет он это все разъяснять.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.96533203125
+    },
+    {
+      "start": 721.74,
+      "end": 725.56,
+      "text": "Ему нужно быстренько взять анализ, и человек должен заплатить деньги и уйти.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9140116373697919
+    },
+    {
+      "start": 725.56,
+      "end": 726.68,
+      "text": "И заработать 2000%.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8905707465277778
+    },
+    {
+      "start": 726.68,
+      "end": 727.64,
+      "text": "Конечно, конечно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.981689453125
+    },
+    {
+      "start": 727.94,
+      "end": 732.74,
+      "text": "И такая же ситуация в поликлиниках бюджетных, государственных.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998291015624999
+    },
+    {
+      "start": 732.76,
+      "end": 733.3,
+      "text": "То же самое.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9996744791666666
+    },
+    {
+      "start": 733.58,
+      "end": 736.68,
+      "text": "То есть таков объем работы, что люди не справляются.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.958152488425926
+    },
+    {
+      "start": 736.8,
+      "end": 740.02,
+      "text": "И я вот слышала, что даже электронная система не справляется.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9660725911458332
+    },
+    {
+      "start": 740.04,
+      "end": 741.9,
+      "text": "Невозможно дозвониться до поликлиник.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9970804850260416
+    },
+    {
+      "start": 741.94,
+      "end": 742.56,
+      "text": "Да, да.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.975830078125
+    },
+    {
+      "start": 742.68,
+      "end": 747.72,
+      "text": "Я сегодня пытался вызвать врача, и система, которая называется, по-моему, Варварская,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9705903795030383
+    },
+    {
+      "start": 747.74,
+      "end": 752.96,
+      "text": "она электронная, она не нашла моего дома вот в ее записях электронных,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8980857001410589
+    },
+    {
+      "start": 752.96,
+      "end": 757.82,
+      "text": "хотя этот дом давно-давно, уже полтора века стоит на Петроградской стороне.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9853651258680555
+    },
+    {
+      "start": 758.5,
+      "end": 761.9,
+      "text": "Вот скажите, пожалуйста, друзья мои, которые слушатели,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.997314453125
+    },
+    {
+      "start": 762.66,
+      "end": 769.08,
+      "text": "а не создается ли впечатление, что у кого-то истекают сроки годности вот этих вот прививок?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9965184529622396
+    },
+    {
+      "start": 769.08,
+      "end": 775.38,
+      "text": "Между прочим, за каждую прививку мы с вами платим производителям около 2000 рублей.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9585586939102565
+    },
+    {
+      "start": 775.78,
+      "end": 776.74,
+      "text": "2000 рублей.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.979248046875
+    },
+    {
+      "start": 776.76,
+      "end": 777.72,
+      "text": "Это госконтроль.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9265869140625
+    },
+    {
+      "start": 777.74,
+      "end": 782.34,
+      "text": "Это госконтракт. И вот создается впечатление, что срок годности кончается.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9889322916666666
+    },
+    {
+      "start": 782.38,
+      "end": 788.52,
+      "text": "Нужно быстро вот это мороженое всем скормить для того, чтобы следующий госконтракт освоить.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9732353014823718
+    },
+    {
+      "start": 788.82,
+      "end": 790.16,
+      "text": "Есть такое.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.67431640625
+    },
+    {
+      "start": 790.36,
+      "end": 792.5,
+      "text": "Я отвечаю за слушателей.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8363037109375
+    },
+    {
+      "start": 792.6,
+      "end": 794.04,
+      "text": "Я думаю, что они со мной согласятся.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9999825613839286
+    },
+    {
+      "start": 794.1,
+      "end": 796.36,
+      "text": "Есть такое мнение и впечатление, действительно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9608561197916666
+    },
+    {
+      "start": 796.62,
+      "end": 800.26,
+      "text": "Уж слишком как-то это все неправильно преподносится, но это вот мое мнение.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9920842097355769
+    },
+    {
+      "start": 800.46,
+      "end": 803.8,
+      "text": "Третий аспект политический, который мы не можем не видеть.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9941677517361112
+    },
+    {
+      "start": 803.82,
+      "end": 807.5,
+      "text": "Впереди выборы, очень известные выборы в нашей стране.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9993082682291667
+    },
+    {
+      "start": 807.5,
+      "end": 814.0,
+      "text": "И, конечно, опыт, ну, например, Южной Кореи, Северной Родезии, Северной Кореи.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9430190577651515
+    },
+    {
+      "start": 814.04,
+      "end": 820.84,
+      "text": "Он позволяет использовать такие навыки контроля, тотального контроля за всеми людьми.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9996448863636364
+    },
+    {
+      "start": 821.16,
+      "end": 823.96,
+      "text": "Самое, понаблюдайте, посмотрите, погуглите.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.95233154296875
+    },
+    {
+      "start": 824.06,
+      "end": 832.22,
+      "text": "В Северной Корее после того, как ввели вот этот контроль через смарт-телефоны, 10% браков распалось.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9877211626838235
+    },
+    {
+      "start": 832.3,
+      "end": 837.34,
+      "text": "Потому что оказалось, что мужья и жены почему-то зависают в домах свиданий.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9987417367788461
+    },
+    {
+      "start": 837.34,
+      "end": 839.92,
+      "text": "Вот представьте, что тут творится в Южной Корее.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8960062662760416
+    },
+    {
+      "start": 840.12,
+      "end": 841.76,
+      "text": "Но это, конечно...",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8170305887858073
+    },
+    {
+      "start": 841.76,
+      "end": 842.34,
+      "text": "Да, это беда.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9119466145833334
+    },
+    {
+      "start": 842.4,
+      "end": 844.2,
+      "text": "Это беда поправимая.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9929606119791666
+    },
+    {
+      "start": 844.42,
+      "end": 848.36,
+      "text": "Потому что свобода союзов, она разрешена.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9965955946180557
+    },
+    {
+      "start": 848.46,
+      "end": 856.58,
+      "text": "Но вот где кучкуется оппозиция, ее остатки, можно выяснить, куда они ходят и даже ходят.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9478190104166667
+    },
+    {
+      "start": 856.78,
+      "end": 858.28,
+      "text": "Это такая сложная комбинация.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9942626953125
+    },
+    {
+      "start": 858.32,
+      "end": 862.46,
+      "text": "Через прибивки коронавируса QR-коды выявить, где находится оппозиция.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9658772786458333
+    },
+    {
+      "start": 862.64,
+      "end": 863.34,
+      "text": "Хотя...",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8505859375
+    },
+    {
+      "start": 863.34,
+      "end": 865.82,
+      "text": "Поскольку QR-коды будут собирать охранники.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99609375
+    },
+    {
+      "start": 866.1,
+      "end": 867.32,
+      "text": "Охранники — это бывшие охранники.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8179443359375
+    },
+    {
+      "start": 867.32,
+      "end": 868.0,
+      "text": "Бывшие сотрудники.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.6684979597727457
+    },
+    {
+      "start": 868.02,
+      "end": 870.04,
+      "text": "Они будут собирать эту информацию.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.999609375
+    },
+    {
+      "start": 870.08,
+      "end": 875.14,
+      "text": "И вся информация о перемещениях российских граждан станет достоянием кого?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.99542236328125
+    },
+    {
+      "start": 875.82,
+      "end": 876.82,
+      "text": "Кого нужно кого?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9852701822916666
+    },
+    {
+      "start": 877.04,
+      "end": 878.5,
+      "text": "Того, кого нельзя называть.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9998779296875
+    },
+    {
+      "start": 878.52,
+      "end": 879.44,
+      "text": "Евгения, я не знаю.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.925537109375
+    },
+    {
+      "start": 879.54,
+      "end": 881.04,
+      "text": "Я с вами здесь не соглашусь.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9993489583333334
+    },
+    {
+      "start": 881.1,
+      "end": 882.24,
+      "text": "По поводу даже охранников.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.982666015625
+    },
+    {
+      "start": 882.3,
+      "end": 887.02,
+      "text": "Потому что работаю с организациями, которые занимаются охранной деятельностью.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9810203269675924
+    },
+    {
+      "start": 887.1,
+      "end": 894.4,
+      "text": "И поверьте мне, люди работают, и они мало думают о таких глобальных проблемах, о которых мы говорим.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9872472426470589
+    },
+    {
+      "start": 894.42,
+      "end": 896.52,
+      "text": "Для того, чтобы кому-то звонить и рассказывать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.990875244140625
+    },
+    {
+      "start": 896.52,
+      "end": 897.7,
+      "text": "Кто где находится.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.6463623046875
+    },
+    {
+      "start": 897.92,
+      "end": 900.96,
+      "text": "Это, наверное, должна быть определенная структура, вновь созданная.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9842122395833333
+    },
+    {
+      "start": 901.04,
+      "end": 901.9,
+      "text": "А вы не знаете ее?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.96416015625
+    },
+    {
+      "start": 902.04,
+      "end": 902.86,
+      "text": "Ее не знаете?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.846954345703125
+    },
+    {
+      "start": 903.18,
+      "end": 904.48,
+      "text": "Я знаю, конечно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9996744791666666
+    },
+    {
+      "start": 904.76,
+      "end": 908.72,
+      "text": "Но, мне кажется, то, что вы сейчас говорите, это какие-то особые люди должны быть.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.988916015625
+    },
+    {
+      "start": 908.72,
+      "end": 911.56,
+      "text": "Я имел в виду Роспотребнадзор.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.979421657986111
+    },
+    {
+      "start": 911.64,
+      "end": 912.88,
+      "text": "А вы кого имели в виду?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9991048177083334
+    },
+    {
+      "start": 913.72,
+      "end": 915.52,
+      "text": "Роспотребнадзор — также там работают люди.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7426560719807943
+    },
+    {
+      "start": 915.74,
+      "end": 917.8,
+      "text": "Живые люди, у которых есть свои проблемы.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9999767485119049
+    },
+    {
+      "start": 918.04,
+      "end": 921.14,
+      "text": "Которые заняты личными делами какими-то.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99871826171875
+    },
+    {
+      "start": 921.3,
+      "end": 922.4,
+      "text": "Поэтому... Да.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.34698429703712463
+    },
+    {
+      "start": 922.46,
+      "end": 925.78,
+      "text": "Мне кажется, в этом и самая большая сложность — выполнение.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9053466796875
+    },
+    {
+      "start": 926.62,
+      "end": 933.31,
+      "text": "Наверное, хорошей задумки со стороны государства — защитить всех нас от болезней.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8104332817925348
+    },
+    {
+      "start": 933.43,
+      "end": 935.01,
+      "text": "И вот мы приходим к этому.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.92462158203125
+    },
+    {
+      "start": 935.07,
+      "end": 938.53,
+      "text": "И вот мы подходим к четвертому дискурсу, о котором надо всегда думать.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9814534505208333
+    },
+    {
+      "start": 938.57,
+      "end": 941.85,
+      "text": "Это особенная такая культуральность нашего государства.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9594401041666667
+    },
+    {
+      "start": 942.43,
+      "end": 947.93,
+      "text": "Ссылаться на закон может быть даже бесполезно, потому что закон — что дышло, куда повернуть туда и вышло.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9000741464120371
+    },
+    {
+      "start": 948.11,
+      "end": 956.19,
+      "text": "И вот эта система, которая вводится тестово в Москве, вполне вероятно, что она будет экстраполирована на все субъекты федерации.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9960080866228072
+    },
+    {
+      "start": 956.19,
+      "end": 963.83,
+      "text": "Но уже возникла огромная база предложений продать эти QR-коды.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9721354166666668
+    },
+    {
+      "start": 964.13,
+      "end": 970.47,
+      "text": "Уже нашлись умельцы, которые продают справки о том, что нельзя прививаться.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9998816287878788
+    },
+    {
+      "start": 970.75,
+      "end": 975.79,
+      "text": "Таким образом, вот такое агрессивное действие создает у населения противодействие.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9409952799479167
+    },
+    {
+      "start": 976.05,
+      "end": 977.73,
+      "text": "Да, как одно из.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9862060546875
+    },
+    {
+      "start": 977.93,
+      "end": 982.71,
+      "text": "Но если мы все-таки возвращаемся к бизнесу, с чем сейчас сталкивается бизнес,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9973582732371795
+    },
+    {
+      "start": 982.95,
+      "end": 985.05,
+      "text": "то это как раз...",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.888641357421875
+    },
+    {
+      "start": 985.05,
+      "end": 990.03,
+      "text": "Каким образом заставить своих работников так или иначе выполнять вот эти меры?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.892549302842882
+    },
+    {
+      "start": 990.35,
+      "end": 991.69,
+      "text": "А заставить...",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7296657562255859
+    },
+    {
+      "start": 991.69,
+      "end": 998.17,
+      "text": "Ну, вы сами понимаете, что можно только в том случае, если это определенная работа.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9581066313244048
+    },
+    {
+      "start": 998.19,
+      "end": 1001.13,
+      "text": "Медицинские работники все прививаются, и никто из них...",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99464111328125
+    },
+    {
+      "start": 1001.13,
+      "end": 1004.43,
+      "text": "Ну, есть, конечно, противопоказания, но все-таки все продолжают работать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9932812500000001
+    },
+    {
+      "start": 1005.39,
+      "end": 1008.35,
+      "text": "Бюджетные организации, как мы слышали, тоже должны привиться.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99971923828125
+    },
+    {
+      "start": 1008.81,
+      "end": 1014.63,
+      "text": "Ну, есть те организации, которые оказывают услуги неопределенному количеству лиц,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9533707682291667
+    },
+    {
+      "start": 1014.63,
+      "end": 1016.11,
+      "text": "тоже должны иметь прививки.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7570343017578125
+    },
+    {
+      "start": 1016.25,
+      "end": 1020.57,
+      "text": "А что же делать обычному бизнесу, который вот как он должен заставить?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9570380316840278
+    },
+    {
+      "start": 1020.65,
+      "end": 1025.01,
+      "text": "Вот это очень много запросов к нам в адвокатское бюро по этому поводу.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9965519831730769
+    },
+    {
+      "start": 1025.25,
+      "end": 1030.85,
+      "text": "И очень много вопросов, а можем ли мы отстранить таких людей, которые отказываются.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998622796474359
+    },
+    {
+      "start": 1031.03,
+      "end": 1032.75,
+      "text": "Ну вот можно их отстранить или нет? Как вы думаете?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9660807291666668
+    },
+    {
+      "start": 1032.95,
+      "end": 1036.39,
+      "text": "Вы знаете, мы должны вернуться к трудовому кодексу,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9899190266927084
+    },
+    {
+      "start": 1036.99,
+      "end": 1043.41,
+      "text": "который при внимательном, детальном изучении, и вот как я применяю его регулярно, находясь в суде,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9995985243055556
+    },
+    {
+      "start": 1043.41,
+      "end": 1050.59,
+      "text": "можно наблюдать, что на работодателей возложен очень большой объем полномочий",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.96036376953125
+    },
+    {
+      "start": 1050.59,
+      "end": 1053.43,
+      "text": "по изданию внутренних локальных актов.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99970703125
+    },
+    {
+      "start": 1053.73,
+      "end": 1059.89,
+      "text": "И то есть для того, чтобы законно отстранить работника от выполнения работы, либо уволить,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9341750372023808
+    },
+    {
+      "start": 1059.99,
+      "end": 1063.39,
+      "text": "нужно внутри организации издать локальный акт.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.999755859375
+    },
+    {
+      "start": 1063.39,
+      "end": 1065.05,
+      "text": "То есть мы идем по цепочке.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9977823893229166
+    },
+    {
+      "start": 1065.05,
+      "end": 1069.95,
+      "text": "Приказ от руководителя, если это большое предприятие, нужно согласовать с профсоюзным комитетом,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9959031846788196
+    },
+    {
+      "start": 1069.97,
+      "end": 1072.17,
+      "text": "возможно, с государственной инспекцией труда.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.978935546875
+    },
+    {
+      "start": 1072.17,
+      "end": 1076.81,
+      "text": "И либо общее собрание, которое принимает какой-то вопрос.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8899558738425927
+    },
+    {
+      "start": 1077.01,
+      "end": 1079.67,
+      "text": "Ну, допустим, давайте мы возьмем как раз вопрос о прививках.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.927294921875
+    },
+    {
+      "start": 1081.87,
+      "end": 1091.31,
+      "text": "Директор издает распоряжение подготовить некий локальный акт для обсуждения на общем собрании работников об обязательности прививок.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9981486002604167
+    },
+    {
+      "start": 1091.47,
+      "end": 1096.47,
+      "text": "Ну, соответственно, этот локальный акт не должен противоречить федеральному закону, трудовому кодексу,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9900105794270834
+    },
+    {
+      "start": 1096.51,
+      "end": 1102.03,
+      "text": "поэтому там те лица, у которых могут быть медотвод, соответственно, они могут не делать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.946382068452381
+    },
+    {
+      "start": 1102.17,
+      "end": 1108.41,
+      "text": "Но остальные люди, которые не прививаются, и, допустим, если даже принимается такой локальный акт в обязательном порядке,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.974685968137255
+    },
+    {
+      "start": 1108.53,
+      "end": 1116.75,
+      "text": "то у владельца бизнеса, руководителя организации, возникает такой вопрос, что делать?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9967669862689393
+    },
+    {
+      "start": 1117.03,
+      "end": 1121.41,
+      "text": "Вот я вижу один из выходов, это изменение тогда в трудовой договор.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9623616536458334
+    },
+    {
+      "start": 1121.57,
+      "end": 1126.35,
+      "text": "В пункт трудового договора, согласно которому, то есть есть локальный акт,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9877559777462122
+    },
+    {
+      "start": 1126.35,
+      "end": 1130.39,
+      "text": "в этой организации можно работать только, допустим, с прививкой, либо с медотводом,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9945170084635416
+    },
+    {
+      "start": 1131.53,
+      "end": 1138.49,
+      "text": "выносится, вносятся изменения в трудовой договор, и далее, если работник не согласен работать в таких условиях, возможно увольнение.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9654210408528646
+    },
+    {
+      "start": 1138.67,
+      "end": 1143.45,
+      "text": "Вот тогда это будет, конечно, выглядеть законно, потому что в трудовом кодексе все-таки имеется статья",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9813766479492188
+    },
+    {
+      "start": 1143.45,
+      "end": 1147.43,
+      "text": "при изменении условий труда, внесенных в трудовой договор.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9928995768229166
+    },
+    {
+      "start": 1147.59,
+      "end": 1153.19,
+      "text": "И если работник не согласен работать, уволить его можно по инициативе работодателя, как один из вариантов.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9985860188802083
+    },
+    {
+      "start": 1153.27,
+      "end": 1157.73,
+      "text": "Да, нам нужно пояснить, что локальный акт, для тех, кто не юрист, это акты корпоративного регулирования,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9412002563476562
+    },
+    {
+      "start": 1157.73,
+      "end": 1162.01,
+      "text": "туда входят различные договоры внутри юридического лица ООО «Ромашка»",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8704517505787037
+    },
+    {
+      "start": 1162.01,
+      "end": 1165.91,
+      "text": "в праве издавать акты корпоративного регулирования, они же локальные акты.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.97686767578125
+    },
+    {
+      "start": 1165.97,
+      "end": 1170.25,
+      "text": "Да, локальные акты, там правила внутреннего трудового распорядка, вот для более простого понимания.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9139091296073718
+    },
+    {
+      "start": 1170.55,
+      "end": 1175.07,
+      "text": "Поэтому вот это может быть выглядеть так, если мы говорим об отстранении работы,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9299097305689104
+    },
+    {
+      "start": 1175.95,
+      "end": 1182.63,
+      "text": "то опять смотря какая работа, есть перечень работ, опять же, мы начинали с этого разговора,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.998117404513889
+    },
+    {
+      "start": 1182.63,
+      "end": 1185.09,
+      "text": "где обязательно должно быть прививка.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9547526041666666
+    },
+    {
+      "start": 1185.15,
+      "end": 1186.33,
+      "text": "Медицинское обслуживание, например.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9446289062500001
+    },
+    {
+      "start": 1186.33,
+      "end": 1186.85,
+      "text": "Медицинская организация.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9562744140625
+    },
+    {
+      "start": 1186.85,
+      "end": 1187.63,
+      "text": "Общение с детьми.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9972330729166666
+    },
+    {
+      "start": 1187.73,
+      "end": 1195.59,
+      "text": "Да, и если у работника нет такой прививки, то организация вправе отстранить его от выполнения работы.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9375356038411458
+    },
+    {
+      "start": 1196.09,
+      "end": 1201.43,
+      "text": "Вопрос этот был поднят еще Министерством труда и в апреле 2021 года,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9785861545138889
+    },
+    {
+      "start": 1201.57,
+      "end": 1207.63,
+      "text": "ведь мы с таким запозданием поднимаем об этом вопрос, потому что все эти разъяснения как-то проходили очень тихо,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9795864172149122
+    },
+    {
+      "start": 1207.63,
+      "end": 1212.67,
+      "text": "не обсуждались очень активно в общественности, а сейчас мы к ним возвращаемся.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998643663194443
+    },
+    {
+      "start": 1212.83,
+      "end": 1216.99,
+      "text": "Минтруд сказал, что да, вправе, если в данной организации",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9431468822337964
+    },
+    {
+      "start": 1216.99,
+      "end": 1224.49,
+      "text": "необходимо выполнение работ только при определенных условиях, а в данном случае при наличии прививки против коронавируса.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9329427083333333
+    },
+    {
+      "start": 1225.05,
+      "end": 1229.39,
+      "text": "Это, ну вот не укоряйте себя, что этим не занимались раньше, это старая история.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9348353794642856
+    },
+    {
+      "start": 1229.41,
+      "end": 1232.91,
+      "text": "Я тут занимаюсь, я как раз занимаюсь, да, мы просто не обсуждаем это все очень активно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9231643676757812
+    },
+    {
+      "start": 1232.91,
+      "end": 1238.05,
+      "text": "Это вот из того же направления, когда, например, моделям в трудовом договоре запрещается рожать детей,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9973524305555554
+    },
+    {
+      "start": 1238.29,
+      "end": 1242.41,
+      "text": "или когда стюардессам запрещается толстеть, вот эта вот история.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8901068793402778
+    },
+    {
+      "start": 1242.41,
+      "end": 1245.99,
+      "text": "Но это законно, извините, это дискриминация с одной стороны, дискриминация.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9002954101562499
+    },
+    {
+      "start": 1245.99,
+      "end": 1251.53,
+      "text": "Но здесь есть право выбора, либо вы хотите работать на этой работе стюардессой,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9509990985576924
+    },
+    {
+      "start": 1251.53,
+      "end": 1254.65,
+      "text": "либо вы не будете там работать, есть определенные критерии.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9970612702546298
+    },
+    {
+      "start": 1254.71,
+      "end": 1258.99,
+      "text": "Да, это то же самое, можно хороший пример приводить для тех, кто не понимает.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9224853515625
+    },
+    {
+      "start": 1259.03,
+      "end": 1260.73,
+      "text": "Это ношение формы, формы одежды.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9680013020833332
+    },
+    {
+      "start": 1260.83,
+      "end": 1266.97,
+      "text": "Ну вот, пожалуйста, для стюардессы колготки, а для офицера полиции, пожалуйста, форма офицера полиции.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.947129603794643
+    },
+    {
+      "start": 1268.05,
+      "end": 1271.33,
+      "text": "Не хочешь носить форму офицера полиции, увольняйся.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9823358444940476
+    },
+    {
+      "start": 1271.33,
+      "end": 1273.13,
+      "text": "Не хочешь делать прививку, увольняйся.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99638671875
+    },
+    {
+      "start": 1273.21,
+      "end": 1279.69,
+      "text": "Да. Но я, знаете, слышала, что в государственных учреждениях такое стимулирование некое вводят,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9740044487847221
+    },
+    {
+      "start": 1279.69,
+      "end": 1285.03,
+      "text": "о том, что примирование и есть материальная помощь,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9863688151041667
+    },
+    {
+      "start": 1285.03,
+      "end": 1289.21,
+      "text": "которая, в принципе, мы знаем, что она на усмотрение работодателя по заявлению,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.97119140625
+    },
+    {
+      "start": 1289.33,
+      "end": 1295.27,
+      "text": "а в данном случае, если принести сертификат о прививке, то будет выдана материальная помощь.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9995489211309524
+    },
+    {
+      "start": 1295.27,
+      "end": 1297.55,
+      "text": "Это, да, достаточно такое хорошее стимулирование.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9991048177083334
+    },
+    {
+      "start": 1297.79,
+      "end": 1302.31,
+      "text": "Как вы думаете, это интересно нашим слушателям, с точки не прогноза,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9578191583806818
+    },
+    {
+      "start": 1302.31,
+      "end": 1310.53,
+      "text": "все-таки мы подойдем к предсказаниям Оруэлла о том, что все будут дискриминированы, кто не подчиняется воле суверена?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9470040780526622
+    },
+    {
+      "start": 1311.29,
+      "end": 1314.95,
+      "text": "Но государство не может быть без механизма принуждения и подчинения.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.942431640625
+    },
+    {
+      "start": 1315.07,
+      "end": 1318.27,
+      "text": "Мы так или иначе все равно подчиняемся каким-то правилам.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.998037109375
+    },
+    {
+      "start": 1318.55,
+      "end": 1320.79,
+      "text": "Поэтому мы, наверное, уже живем в этом во всем.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9935980902777778
+    },
+    {
+      "start": 1320.91,
+      "end": 1321.53,
+      "text": "То есть мы уже внутри.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.93388671875
+    },
+    {
+      "start": 1321.53,
+      "end": 1322.73,
+      "text": "Мы уже внутри этого, да.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99287109375
+    },
+    {
+      "start": 1323.29,
+      "end": 1325.87,
+      "text": "Понятно. И выхода нет, придется прививаться.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9994167751736112
+    },
+    {
+      "start": 1325.97,
+      "end": 1329.87,
+      "text": "Есть выход, наверное, уезжать в те страны, о которых вы говорили, где жить на островах.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9877766927083333
+    },
+    {
+      "start": 1329.87,
+      "end": 1330.99,
+      "text": "Мы говорили про Танзанию.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9879150390625
+    },
+    {
+      "start": 1330.99,
+      "end": 1333.07,
+      "text": "Где жить на островах, я не знаю.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8220629010881696
+    },
+    {
+      "start": 1334.17,
+      "end": 1339.77,
+      "text": "Друзья, я хочу предупредить, что, например, тем, кто решил уехать в Танзанию, плюс три прививки еще.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9873021443684895
+    },
+    {
+      "start": 1340.09,
+      "end": 1341.07,
+      "text": "Так что остаемся здесь.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.87847900390625
+    },
+    {
+      "start": 1341.07,
+      "end": 1343.25,
+      "text": "Вот видите, опять же о дискриминации.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7081095377604166
+    },
+    {
+      "start": 1343.37,
+      "end": 1346.63,
+      "text": "Остаемся здесь, в нашей прекрасной стране, которая заботится о нас.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9972819010416666
+    },
+    {
+      "start": 1346.93,
+      "end": 1350.03,
+      "text": "На вопрос, а законно ли это, я уверен, что мы ответили.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9856622869318182
+    },
+    {
+      "start": 1350.11,
+      "end": 1355.31,
+      "text": "И я рекомендую думать о том, что весь правопорядок, он не состоит только из законов.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9971061197916666
+    },
+    {
+      "start": 1355.31,
+      "end": 1360.97,
+      "text": "Как минимум, сегодня вот мы проиллюстрировали значение локальных актов или актов корпоративных,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8992657131618923
+    },
+    {
+      "start": 1360.97,
+      "end": 1367.05,
+      "text": "и существует судебная практика, существуют различные деловые обыкновения.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8677850087483723
+    },
+    {
+      "start": 1367.17,
+      "end": 1374.11,
+      "text": "И вот обращаться ли в суды, как вы думаете, Ирина, если что-то не нравится в поведении работодателя?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.988326461226852
+    },
+    {
+      "start": 1374.41,
+      "end": 1378.77,
+      "text": "Мое мнение, в суд нужно обращаться всегда, когда вы хотите отстоять свои права.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9858648838141026
+    },
+    {
+      "start": 1379.17,
+      "end": 1385.91,
+      "text": "И, Евгений, вы же прекрасно знаете, вы признаны в нашем сообществе адвокатским специалистом в этом вопросе.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9820139567057292
+    },
+    {
+      "start": 1386.11,
+      "end": 1389.59,
+      "text": "Каждое дело индивидуально, вы согласны со мной.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9976888020833333
+    },
+    {
+      "start": 1389.69,
+      "end": 1391.55,
+      "text": "И каждому решать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.996337890625
+    },
+    {
+      "start": 1391.55,
+      "end": 1395.95,
+      "text": "Но мое мнение, конечно, если вы с чем-то не согласны, терпеть это нельзя.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9591645740327381
+    },
+    {
+      "start": 1396.13,
+      "end": 1404.67,
+      "text": "Если организация понимает, что незаконно, неправильно в отношении нее вынесено какой-то административный протокол, конечно, нужно его обжаловать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9919501410590278
+    },
+    {
+      "start": 1404.75,
+      "end": 1408.49,
+      "text": "Если речь идет о каких-то больших штрафах, конечно, нужно обжаловать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9996337890625
+    },
+    {
+      "start": 1408.65,
+      "end": 1419.55,
+      "text": "Хотя сталкивались с такими ситуациями, когда бизнес, отдельные организации говорят, да ладно, заплатим, но больше такого не повторится.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9681080005787037
+    },
+    {
+      "start": 1419.65,
+      "end": 1420.99,
+      "text": "То есть разный подход у всех.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9891764322916666
+    },
+    {
+      "start": 1421.55,
+      "end": 1427.19,
+      "text": "Я знаю, что вы много работаете с трудовой инспекцией и хорошо относитесь к Роспотребнадзору.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9737269810267858
+    },
+    {
+      "start": 1427.27,
+      "end": 1441.35,
+      "text": "Но вот я слышу регулярно жалобы от рестораторов, ну, в частности, с Рубинштейна, где говорится о том, что Роспотребнадзор не старается защитить население от неправильного ведения бизнеса,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9617633584104938
+    },
+    {
+      "start": 1441.35,
+      "end": 1448.05,
+      "text": "а просто, будем называть эту деятельность своими именами, просто вымогают деньги.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9984278823390151
+    },
+    {
+      "start": 1448.51,
+      "end": 1450.95,
+      "text": "Ну, это уже другой аспект, да?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9833984375
+    },
+    {
+      "start": 1450.95,
+      "end": 1452.49,
+      "text": "Вот как быть с этим аспектом?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9256591796875
+    },
+    {
+      "start": 1452.55,
+      "end": 1456.05,
+      "text": "Когда вымогают деньги, я думаю, что вы лучше ответите на этот вопрос.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9688212076822916
+    },
+    {
+      "start": 1456.19,
+      "end": 1459.07,
+      "text": "Вы работаете как раз в сфере уголовно-правового регулирования.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9990306712962962
+    },
+    {
+      "start": 1459.21,
+      "end": 1471.95,
+      "text": "А если мы говорим о действиях Роспотребнадзора, не касаясь темы вымогательства денег, то Роспотребнадзор, опять же, каждый конкретный случай нужно рассматривать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9995334201388889
+    },
+    {
+      "start": 1472.57,
+      "end": 1479.13,
+      "text": "Если они приходят и вменяют какое-то правонарушение, если они составляют административный материал,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9986215444711538
+    },
+    {
+      "start": 1479.13,
+      "end": 1484.19,
+      "text": "то индивидуально вычитываем, читаем, смотрим, какие нарушения.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9443103608630953
+    },
+    {
+      "start": 1484.63,
+      "end": 1493.83,
+      "text": "Вот всем известно о том, что год назад был такой Удмуртский, в Удмуртии был судебный акт очень громкий, который освещался,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9608846028645834
+    },
+    {
+      "start": 1493.93,
+      "end": 1501.01,
+      "text": "и говорили о том, что ура, наконец-то мы можем теперь бороться на законных основаниях, приводя в пример вот этот судебный акт.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9947361801609848
+    },
+    {
+      "start": 1501.05,
+      "end": 1509.11,
+      "text": "Но я внимательно его изучила и обнаружила, что на самом деле отмена вот этого административного наказания,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9968159993489584
+    },
+    {
+      "start": 1509.13,
+      "end": 1513.05,
+      "text": "было только из-за того, что неправильно административный материал был составлен.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9126180013020833
+    },
+    {
+      "start": 1513.13,
+      "end": 1514.23,
+      "text": "Формальный юридический аспект.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8235880533854166
+    },
+    {
+      "start": 1514.23,
+      "end": 1519.75,
+      "text": "Формальный, да. И каждый конкретный случай нужно рассматривать индивидуально.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9672516999421296
+    },
+    {
+      "start": 1519.79,
+      "end": 1525.71,
+      "text": "Если вы не согласны с действиями Роспотребнадзора, нужно обращаться в суд, обжаловать его действия.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9840882316468254
+    },
+    {
+      "start": 1525.73,
+      "end": 1530.27,
+      "text": "Есть вышестоящие инстанции, то есть механизмы эти все прописаны у нас в кодексах.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9982221554487178
+    },
+    {
+      "start": 1530.31,
+      "end": 1535.49,
+      "text": "Нужно просто уметь ими пользоваться и привлекать, наверное, тех специалистов, которые знают, как это сделать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.998562282986111
+    },
+    {
+      "start": 1535.83,
+      "end": 1536.57,
+      "text": "Ну, то есть нас?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9937744140625
+    },
+    {
+      "start": 1536.81,
+      "end": 1537.83,
+      "text": "Конечно, конечно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.964599609375
+    },
+    {
+      "start": 1538.07,
+      "end": 1539.11,
+      "text": "Такая небольшая речь.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.7849934895833334
+    },
+    {
+      "start": 1539.13,
+      "end": 1545.93,
+      "text": "Но вот я бы обратил внимание на пессимизм у наших граждан по поводу перспектив споров с государством.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9568474264705882
+    },
+    {
+      "start": 1545.97,
+      "end": 1550.15,
+      "text": "Потому что Роспотребнадзор — это все-таки государственная структура, очень мощная,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9267366043244949
+    },
+    {
+      "start": 1550.23,
+      "end": 1558.33,
+      "text": "которая стала, ну, как FBI уже теперь, и ссориться с ней не является ли бесполезным тратой времени и сил?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9726284094024124
+    },
+    {
+      "start": 1558.47,
+      "end": 1559.15,
+      "text": "Как вы думаете?",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9923502604166666
+    },
+    {
+      "start": 1560.41,
+      "end": 1562.01,
+      "text": "Смотря какие цели мы ставим.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.98994140625
+    },
+    {
+      "start": 1562.03,
+      "end": 1567.21,
+      "text": "Вы знаете, когда ко мне приходят люди и говорят «мы хотим», рассказывают о своей проблеме,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9783040364583333
+    },
+    {
+      "start": 1567.21,
+      "end": 1569.75,
+      "text": "и в конце я всегда задаю два вопроса.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.89849853515625
+    },
+    {
+      "start": 1569.75,
+      "end": 1571.17,
+      "text": "В итоге вы что хотите?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.92021484375
+    },
+    {
+      "start": 1572.84,
+      "end": 1580.56,
+      "text": "Есть такие люди принципиальные и говорят «нам не важен результат, мы хотим именно пройти этот процесс,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9277555147806804
+    },
+    {
+      "start": 1581.16,
+      "end": 1586.06,
+      "text": "мы хотим доказать», знаете, такая мне очень нравится фраза «принудить к миру».",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9211119757758247
+    },
+    {
+      "start": 1586.06,
+      "end": 1587.06,
+      "text": "Вы не слышали такое?",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.85675048828125
+    },
+    {
+      "start": 1587.14,
+      "end": 1588.04,
+      "text": "Вас не употребляли.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8650065104166668
+    },
+    {
+      "start": 1588.08,
+      "end": 1589.36,
+      "text": "«Принудить к миру» некоторых.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.90245361328125
+    },
+    {
+      "start": 1589.62,
+      "end": 1592.09,
+      "text": "И показать свою силу.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.99737548828125
+    },
+    {
+      "start": 1592.44,
+      "end": 1598.36,
+      "text": "То есть нужно ли судиться или нет, каждый раз индивидуально это все нужно рассматривать.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9719342912946428
+    },
+    {
+      "start": 1598.54,
+      "end": 1603.76,
+      "text": "Да. Но если мы говорим о рациональности, с точки зрения рестораторов с улицы Рубинштейна,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.98681640625
+    },
+    {
+      "start": 1603.92,
+      "end": 1607.36,
+      "text": "то «принудить к миру» они никого не пытаются, они пытаются выжить.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9080439134077593
+    },
+    {
+      "start": 1607.36,
+      "end": 1611.44,
+      "text": "Зато они смогут Роспотребнадзору показать, что Роспотребнадзор не прав,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9357783564814814
+    },
+    {
+      "start": 1611.72,
+      "end": 1617.0,
+      "text": "и о том, что у них есть защита, и о том, что они смогут отстоять свои права.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9748343673406862
+    },
+    {
+      "start": 1617.04,
+      "end": 1620.82,
+      "text": "И в следующий раз Роспотребнадзор, даже если и придет, он подготовится.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9414013178661617
+    },
+    {
+      "start": 1620.9,
+      "end": 1623.44,
+      "text": "Конечно, это осложнит нашу работу, но все-таки.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9987996419270833
+    },
+    {
+      "start": 1623.6,
+      "end": 1626.86,
+      "text": "Вот именно эта нотка оптимизма очень важна сегодня,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9908650716145833
+    },
+    {
+      "start": 1626.86,
+      "end": 1630.74,
+      "text": "потому что есть возможность спорить с государственными органами.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8352762858072916
+    },
+    {
+      "start": 1630.82,
+      "end": 1633.58,
+      "text": "Это не истина в последней инстанции, равно как и суд.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9799153645833334
+    },
+    {
+      "start": 1633.94,
+      "end": 1636.52,
+      "text": "Какой-нибудь районный суд – это тоже не истина в последней инстанции.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9211290147569443
+    },
+    {
+      "start": 1636.72,
+      "end": 1638.24,
+      "text": "Конечно, дорогу осилит идущий.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9590047200520834
+    },
+    {
+      "start": 1638.3,
+      "end": 1643.9,
+      "text": "Я уверен в том, что прививка – это в любом случае упрощает жизнь человека.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9407755533854166
+    },
+    {
+      "start": 1645.3,
+      "end": 1650.16,
+      "text": "Это упрощает и социальную жизнь, и в большинстве случаев, в 90 случаев,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.995144314236111
+    },
+    {
+      "start": 1650.16,
+      "end": 1651.58,
+      "text": "это спасает жизнь человека.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.848876953125
+    },
+    {
+      "start": 1652.2,
+      "end": 1655.66,
+      "text": "Поэтому я не рекламирую прививки, я просто считаю, что без этого уже…",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9784111870659723
+    },
+    {
+      "start": 1655.66,
+      "end": 1657.9,
+      "text": "Но к этому разумно нужно индивидуально подходить.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.890390159970238
+    },
+    {
+      "start": 1658.04,
+      "end": 1662.8,
+      "text": "Это человек прививается, именно он решает для себя, делать это или нет.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9791259765625
+    },
+    {
+      "start": 1662.92,
+      "end": 1666.88,
+      "text": "И какие последствия после этого будут, он решает,",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9998372395833333
+    },
+    {
+      "start": 1666.92,
+      "end": 1669.12,
+      "text": "а не кто-то – государство или Роспотребнадзор.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8743269708421495
+    },
+    {
+      "start": 1669.24,
+      "end": 1670.82,
+      "text": "Каждый для себя решает сам.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9999674479166668
+    },
+    {
+      "start": 1671.24,
+      "end": 1674.52,
+      "text": "Да, если у нас наша задача заключается в том, чтобы снять проблему,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9691026475694445
+    },
+    {
+      "start": 1674.52,
+      "end": 1678.46,
+      "text": "уменьшить количество трудностей, то, конечно, нам проще привиться и не мучиться,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9983760949337122
+    },
+    {
+      "start": 1678.52,
+      "end": 1680.0,
+      "text": "если у нас, конечно, нет противопоказаний.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.999267578125
+    },
+    {
+      "start": 1680.1,
+      "end": 1684.54,
+      "text": "И ни в коем случае, друзья мои, не покупайте фальшивые справки,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9985973011363637
+    },
+    {
+      "start": 1684.54,
+      "end": 1689.9,
+      "text": "потому что использование документа подобного рода образует состав преступления.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9625922309027778
+    },
+    {
+      "start": 1690.22,
+      "end": 1695.36,
+      "text": "И вот также примите к сведению, что половина из тех лиц,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9534727154356062
+    },
+    {
+      "start": 1695.36,
+      "end": 1699.62,
+      "text": "которые предлагают купить такие справки – это сотрудники, оперативные,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8909233940972222
+    },
+    {
+      "start": 1699.62,
+      "end": 1702.4,
+      "text": "уполномоченные, которые разрабатывают и внедряют.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9871630859374999
+    },
+    {
+      "start": 1702.48,
+      "end": 1705.28,
+      "text": "Равно как те люди, которые у вас вымогают взятки,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9980920862268517
+    },
+    {
+      "start": 1705.28,
+      "end": 1708.62,
+      "text": "в половине случаев их возьмут и, может быть, отстанут от вас,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9976399739583335
+    },
+    {
+      "start": 1708.72,
+      "end": 1711.38,
+      "text": "а в другой половине оформят как дачу взятки.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9912923177083334
+    },
+    {
+      "start": 1711.5,
+      "end": 1714.32,
+      "text": "Это тоже две стороны одной медали.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9991048177083334
+    },
+    {
+      "start": 1714.67,
+      "end": 1716.09,
+      "text": "Да, это и так действительно.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9642578125
+    },
+    {
+      "start": 1717.7,
+      "end": 1720.58,
+      "text": "На этом мы сегодня заканчиваем, друзья мои.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.982421875
+    },
+    {
+      "start": 1721.08,
+      "end": 1726.28,
+      "text": "Живем, радуемся жизни и понимаем, что у каждой проблемы, которая существует,",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9954205137310607
+    },
+    {
+      "start": 1726.3,
+      "end": 1728.24,
+      "text": "есть несколько дискурсов.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9991861979166666
+    },
+    {
+      "start": 1728.3,
+      "end": 1733.92,
+      "text": "Вот сегодня мы рассмотрели медицинский дискурс, бизнес, политический и культурологический.",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9416829427083334
+    },
+    {
+      "start": 1734.04,
+      "end": 1738.9,
+      "text": "И все они свидетельствуют в пользу того, что нам нужно тщательно следить за своим здоровьем",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.9998806423611111
+    },
+    {
+      "start": 1738.9,
+      "end": 1742.82,
+      "text": "и вести здоровый образ жизни и слушать радио «Бизнес.ФМ».",
+      "speaker_id": "speaker_0",
+      "speaker_name": null,
+      "confidence": 0.8673136393229168
+    },
+    {
+      "start": 1742.82,
+      "end": 1745.24,
+      "text": "Да, уважаемые слушатели, я тоже желаю всем здоровья.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.9786224365234375
+    },
+    {
+      "start": 1745.24,
+      "end": 1747.98,
+      "text": "Не болеть, но при этом защищать свои права.",
+      "speaker_id": "speaker_1",
+      "speaker_name": null,
+      "confidence": 0.8772633870442709
+    }
+  ]
+}

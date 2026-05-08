@@ -12,7 +12,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from backend.app.auth import TokenData, auth_config, get_current_user
+from backend.app.auth import TokenData, get_current_user
 from backend.core.audit import AuditAction, audit_log
 from backend.core.developer_settings import (
     find_catalog_entry,
@@ -25,7 +25,7 @@ router = APIRouter(prefix="/api/developer", tags=["developer"])
 
 def require_developer(user: TokenData = Depends(get_current_user)) -> TokenData:
     """Allow admins and developer-role users into the developer panel."""
-    if user.role not in {"admin", "developer"} and user.username != auth_config.default_username:
+    if user.role not in {"admin", "developer"}:
         raise HTTPException(status_code=403, detail="Developer access required")
     return user
 

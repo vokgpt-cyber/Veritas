@@ -6,6 +6,11 @@ VERITAS 1.0 is the first pilot baseline for on-premise legal transcription,
 court hearing stenograms, administrative meeting protocols, and action-list
 drafting.
 
+Security handoff update: the IT Ubuntu package now includes a production Nginx
+frontend, local-only binds by default, hardened Compose services, pinned vLLM
+image tag, no default `--trust-remote-code`, safer upload handling, dependency
+CVE updates, and `deploy/it-ubuntu/SECURITY_REVIEW.md`.
+
 ## Scope
 
 - Windows workstation development remains in the project root.

@@ -7,11 +7,11 @@
 --extra-index-url https://download.pytorch.org/whl/cu126
 
 # Core Web Framework
-fastapi==0.115.6
+fastapi==0.136.1
 uvicorn[standard]==0.34.0
 pydantic==2.10.5
 pydantic-settings==2.7.1
-python-multipart==0.0.20
+python-multipart==0.0.27
 websockets==14.2
 httpx==0.28.1
 PyYAML==6.0.2
@@ -40,7 +40,7 @@ soundfile==0.13.1
 # transitively, so listing hydra-core alone is sufficient.
 hydra-core>=1.3,<2.0
 faster-whisper==1.1.0  # Tier 3 fallback: Whisper large-v3 via CTranslate2
-sentencepiece==0.2.0  # Required by GigaAM RNNT decoder
+sentencepiece==0.2.1  # Required by GigaAM RNNT decoder
 # Tier 1 Whisper (antony66/whisper-large-v3-russian) loaded via HF transformers — no extra package needed
 # nemo_toolkit[asr]==2.2.0  # Linux only, uncomment if deploying on Linux
 
@@ -69,8 +69,8 @@ torchmetrics>=1.4,<1.9
 
 # Transformers + huggingface-hub — version skew is a known trap.
 # transformers requires huggingface-hub<1.0. Unpinned pip resolves to 1.11+ which breaks transformers import.
-transformers>=4.57.0,<5.0
-huggingface-hub>=0.34.0,<1.0
+transformers==5.8.0
+huggingface-hub>=1.5.0,<2.0
 
 # NOT INSTALLED (on purpose): torchcodec
 # torchcodec 0.7+ crashes on Windows + torch 2.8 with DLL error (aoti_torch_aten_narrow not found
@@ -119,6 +119,6 @@ numpy>=1.26.4
 aiofiles==24.1.0
 
 # Security
-python-jose[cryptography]==3.3.0
+python-jose[cryptography]==3.5.0
 passlib[bcrypt]==1.7.4
-cryptography==44.0.0
+cryptography==46.0.7

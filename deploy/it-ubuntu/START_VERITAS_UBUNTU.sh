@@ -15,6 +15,16 @@ make_secret() {
   fi
 }
 
+make_password() {
+  if command -v openssl >/dev/null 2>&1; then
+    openssl rand -base64 24 | tr -d '=+/' | cut -c1-24
+  else
+    head -c 24 /dev/urandom | base64 | tr -d '=+/' | cut -c1-24
+  fi
+}
+
+BOOTSTRAP_PASSWORD=""
+
 echo
 echo "======================================================"
 echo " VERITAS 1.0 Ubuntu server launcher"
@@ -44,9 +54,13 @@ if [ ! -f "${ENV_FILE}" ]; then
   cp "${ENV_EXAMPLE}" "${ENV_FILE}"
   AUTH_SECRET="$(make_secret)"
   ENC_SECRET="$(make_secret)"
+  BOOTSTRAP_PASSWORD="$(make_password)"
   sed -i "s/^EPAM_AUTH_SECRET_KEY=.*/EPAM_AUTH_SECRET_KEY=${AUTH_SECRET}/" "${ENV_FILE}"
   sed -i "s/^EPAM_ENCRYPTION_SECRET_KEY=.*/EPAM_ENCRYPTION_SECRET_KEY=${ENC_SECRET}/" "${ENV_FILE}"
+  sed -i "s/^EPAM_AUTH_DEFAULT_PASSWORD=.*/EPAM_AUTH_DEFAULT_PASSWORD=${BOOTSTRAP_PASSWORD}/" "${ENV_FILE}"
   echo "[SETUP] Created random auth/encryption secrets."
+  echo "[SETUP] Created one-time bootstrap admin password: ${BOOTSTRAP_PASSWORD}"
+  echo "[SETUP] Change it after first login, then clear EPAM_AUTH_DEFAULT_PASSWORD or replace it with a hash."
   echo "[SETUP] Open ${ENV_FILE} and add HF_TOKEN before the first pyannote run."
   echo
 fi
@@ -55,6 +69,34 @@ set -a
 # shellcheck disable=SC1090
 . "${ENV_FILE}"
 set +a
+
+if [[ "${VLLM_IMAGE:-}" == *":latest" ]]; then
+  echo "[ERROR] VLLM_IMAGE must not use :latest for a server deployment."
+  echo "        Pin an approved tag or digest in ${ENV_FILE}."
+  exit 4
+fi
+
+if [ "${EPAM_FRONTEND_BIND:-127.0.0.1}" != "127.0.0.1" ] && [ -z "${EPAM_AUTH_DEFAULT_PASSWORD_HASH:-}" ]; then
+  echo "[ERROR] Frontend is configured for non-local access, but no admin password hash is set."
+  echo "        Set EPAM_AUTH_DEFAULT_PASSWORD_HASH before exposing VERITAS to the network."
+  exit 5
+fi
+
+if [ -z "${EPAM_AUTH_DEFAULT_PASSWORD_HASH:-}" ] && [ "${EPAM_AUTH_DEFAULT_PASSWORD:-admin}" = "admin" ]; then
+  echo "[SECURITY] Bootstrap admin password is still the built-in default."
+  echo "[SECURITY] Keep EPAM_FRONTEND_BIND=127.0.0.1 and change it immediately."
+  echo
+fi
+
+if [ "${EPAM_FRONTEND_BIND:-127.0.0.1}" = "127.0.0.1" ]; then
+  echo "[SECURITY] Frontend is bound to localhost only. Use VPN/reverse proxy after IT review."
+else
+  echo "[SECURITY] Frontend bind is ${EPAM_FRONTEND_BIND}. Confirm firewall/VPN controls are in place."
+fi
+
+if [ -z "${HF_TOKEN:-}" ]; then
+  echo "[WARNING] HF_TOKEN is empty. First pyannote/vLLM model download may fail."
+fi
 
 TOTAL_MB="$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n 1 | tr -d ' ')"
 GPU_NAME="$(nvidia-smi --query-gpu=name --format=csv,noheader | head -n 1)"
@@ -101,8 +143,15 @@ echo "======================================================"
 echo " VERITAS 1.0 is running"
 echo
 echo " Local URL:  http://localhost:${EPAM_FRONTEND_PORT:-5173}"
-echo " LAN URL:    http://${SERVER_IP}:${EPAM_FRONTEND_PORT:-5173}"
-echo " Login:      admin / admin"
+if [ "${EPAM_FRONTEND_BIND:-127.0.0.1}" = "127.0.0.1" ]; then
+  echo " Network:    localhost-only. Publish through an IT-approved reverse proxy/VPN."
+else
+  echo " LAN URL:    http://${SERVER_IP}:${EPAM_FRONTEND_PORT:-5173}"
+fi
+echo " Login:      use the configured admin account; change bootstrap password before pilot use."
+if [ -n "${BOOTSTRAP_PASSWORD}" ]; then
+  echo " Bootstrap:  admin / ${BOOTSTRAP_PASSWORD}"
+fi
 echo
 echo " Stop:       ${SCRIPT_DIR}/STOP_VERITAS_UBUNTU.sh"
 echo " Logs:       docker compose --env-file ${ENV_FILE} -f ${COMPOSE_FILE} logs -f"

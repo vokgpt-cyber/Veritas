@@ -19,6 +19,8 @@ services:
       EPAM_DATA_ROOT: "/app"
       EPAM_SHARED_DATA_ROOT: "/app/shared-data"
       EPAM_AUTH_SECRET_KEY: "${EPAM_AUTH_SECRET_KEY}"
+      EPAM_AUTH_DEFAULT_PASSWORD_HASH: "${EPAM_AUTH_DEFAULT_PASSWORD_HASH:-}"
+      EPAM_AUTH_DEFAULT_PASSWORD: "${EPAM_AUTH_DEFAULT_PASSWORD:-}"
       EPAM_ENCRYPTION_SECRET_KEY: "${EPAM_ENCRYPTION_SECRET_KEY}"
       EPAM_BACKEND_PORT: "8000"
       EPAM_SERVER_HOST: "0.0.0.0"
@@ -36,6 +38,8 @@ services:
       PYTORCH_CUDA_ALLOC_CONF: "expandable_segments:True"
       VERITAS_GPU_VRAM_BUDGET_GB: "${VERITAS_GPU_VRAM_BUDGET_GB:-30}"
       VERITAS_DISABLE_QUALITY_FALLBACKS: "${VERITAS_DISABLE_QUALITY_FALLBACKS:-true}"
+      VERITAS_MAX_MEDIA_UPLOAD_BYTES: "${VERITAS_MAX_MEDIA_UPLOAD_BYTES:-5368709120}"
+      VERITAS_MAX_CONTEXT_UPLOAD_BYTES: "${VERITAS_MAX_CONTEXT_UPLOAD_BYTES:-52428800}"
     ports:
       - "${EPAM_BACKEND_BIND:-127.0.0.1}:${EPAM_BACKEND_PORT:-8765}:8000"
     volumes:
@@ -45,8 +49,14 @@ services:
       - veritas-torch-cache:/home/veritas/.cache/torch
       - veritas-ct2-cache:/home/veritas/.cache/ctranslate2
       - ../../config:/app/config:ro
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=2g
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 512
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/health', timeout=5)"]
       interval: 30s
@@ -64,23 +74,32 @@ services:
       context: ../../frontend
       dockerfile: Dockerfile
     environment:
-      EPAM_FRONTEND_PORT: "5173"
+      EPAM_FRONTEND_PORT: "8080"
       EPAM_BACKEND_HOST: "backend"
       EPAM_BACKEND_PORT: "8000"
     ports:
-      - "${EPAM_FRONTEND_BIND:-0.0.0.0}:${EPAM_FRONTEND_PORT:-5173}:5173"
+      - "${EPAM_FRONTEND_BIND:-127.0.0.1}:${EPAM_FRONTEND_PORT:-5173}:8080"
     depends_on:
       backend:
         condition: service_healthy
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+      - /var/cache/nginx:rw,noexec,nosuid,size=64m
+      - /var/run:rw,noexec,nosuid,size=64m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 256
     restart: unless-stopped
     networks:
       - veritas-net
 
   vllm:
     profiles: ["vllm"]
-    image: "${VLLM_IMAGE:-vllm/vllm-openai:latest}"
+    image: "${VLLM_IMAGE:-vllm/vllm-openai:v0.18.2}"
     container_name: veritas-vllm
-    ipc: host
     gpus: all
     shm_size: "8gb"
     environment:
@@ -108,11 +127,19 @@ services:
       - "${VLLM_MAX_MODEL_LEN:-65536}"
       - "--dtype"
       - "${VLLM_DTYPE:-auto}"
-      - "--trust-remote-code"
     ports:
       - "${VLLM_BIND:-127.0.0.1}:${VLLM_PORT:-8001}:8000"
     volumes:
-      - veritas-hf-cache:/root/.cache/huggingface
+      - veritas-vllm-cache:/root/.cache
+      - veritas-vllm-config:/root/.config
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=8g
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    pids_limit: 2048
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/v1/models', timeout=5)"]
       interval: 30s
@@ -133,3 +160,5 @@ volumes:
   veritas-hf-cache:
   veritas-torch-cache:
   veritas-ct2-cache:
+  veritas-vllm-cache:
+  veritas-vllm-config:

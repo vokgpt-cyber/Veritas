@@ -570,7 +570,7 @@ Sweet spot: 2-4 speakers, ~10-30 min audio, Russian. This is where the system sh
 - Bug 50: Capitalization at segment joins — lowercase next segment start when no preceding punct
 - `/no_think` directive added to all Qwen3 prompts to prevent thinking tokens consuming budget
 - Anti-hallucination prompt strengthened for decisions/tasks extraction
-- Claude API comparison button on protocol page (online only, requires ANTHROPIC_API_KEY)
+- Codex API comparison button on protocol page (online only, requires ANTHROPIC_API_KEY)
 - Debug logging for meeting context flow (upload → orchestrator → summarization)
 - .gitattributes added for consistent LF line endings
 
@@ -1337,7 +1337,7 @@ empty month directories cleaned up after sweep. `_archive_results`
 method retains its name for caller stability — internal layout
 upgraded.
 
-**CLAUDE.md sync (Task #33).** Top-of-file architecture line and
+**AGENTS.md sync (Task #33).** Top-of-file architecture line and
 dependency description now correctly reflect Gemma 4 26B as the
 default summarization model since 2026-04-22. T-Pro 2.0 references
 preserved (per user decision 2026-04-30 — "Не убирай упоминания") as
@@ -1446,14 +1446,14 @@ resolved port.
 
 - Folder backups: `VERITAS_backups/backup_blockN_YYYY-MM-DD/` before each block
 - Git commits after each significant change within a block
-- CLAUDE.md updated at end of each session
+- AGENTS.md updated at end of each session
 
-## Session Instructions for Claude
+## Session Instructions for Codex
 
 1. ALWAYS read this file first at the start of every session
 2. Check git log for recent changes
 3. Update "Current State" line above when completing work
-4. **MANDATORY before session ends: update CLAUDE.md to reflect ALL changes made in this session.** This includes:
+4. **MANDATORY before session ends: update AGENTS.md to reflect ALL changes made in this session.** This includes:
    - Architecture changes (new engines, new libraries, changed defaults)
    - New files added (update Backend/Frontend Structure sections)
    - New dependencies (update Dependencies section)
@@ -1461,9 +1461,9 @@ resolved port.
    - Bug fixes (add to Bugs Fixed section)
    - Test count changes
    - Any changed behavior that a future session or strategy chat needs to know
-   **This is critical because strategy sessions rely on CLAUDE.md for accurate project state. Stale docs cause wrong decisions.**
+   **This is critical because strategy sessions rely on AGENTS.md for accurate project state. Stale docs cause wrong decisions.**
 5. Commit to git and update this file before session ends
 6. All code in English, no Cyrillic in source
 7. Production-ready code only — no stubs, no placeholders
 8. Security is non-negotiable — every feature must consider data privacy
-9. Never trust CLAUDE.md blindly — if in doubt, verify against actual code with grep/read
+9. Never trust AGENTS.md blindly — if in doubt, verify against actual code with grep/read

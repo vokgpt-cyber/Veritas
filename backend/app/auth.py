@@ -34,6 +34,7 @@ class AuthConfig(BaseSettings):
     # Default admin credentials (MUST be changed in production)
     default_username: str = "admin"
     default_password_hash: str = ""
+    default_password: str = "admin"
 
     model_config = SettingsConfigDict(env_prefix="EPAM_AUTH_")
 
@@ -136,12 +137,13 @@ def _ensure_default_user() -> None:
                 password_hash = auth_config.default_password_hash
                 must_change = 0
             else:
-                password_hash = pwd_context.hash("admin")
+                password_hash = pwd_context.hash(auth_config.default_password or "admin")
                 must_change = 1
-                logger.warning(
-                    "Using default admin password. Set "
-                    "EPAM_AUTH_DEFAULT_PASSWORD_HASH in production!"
-                )
+                if auth_config.default_password == "admin":
+                    logger.warning(
+                        "Using default admin password. Set "
+                        "EPAM_AUTH_DEFAULT_PASSWORD_HASH in production!"
+                    )
 
             now = _now_iso()
             conn.execute(
@@ -165,7 +167,7 @@ def _ensure_default_user() -> None:
         return
     password_hash = (
         auth_config.default_password_hash
-        or pwd_context.hash("admin")
+        or pwd_context.hash(auth_config.default_password or "admin")
     )
     _users_db[auth_config.default_username] = {
         "username": auth_config.default_username,
@@ -582,7 +584,7 @@ def require_admin(user: TokenData = Depends(get_current_user)) -> TokenData:
         async def admin_route(user: TokenData = Depends(require_admin)):
             return {"admin": user.username}
     """
-    if user.role != "admin" and user.username != auth_config.default_username:
+    if user.role != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Admin access required",

@@ -3,6 +3,7 @@
 import asyncio
 import json as json_lib
 import logging
+import os
 import re
 from datetime import datetime
 from pathlib import Path
@@ -28,6 +29,70 @@ router = APIRouter(prefix="/api/meetings", tags=["meetings"])
 # Default maximum extracted text from each context file. The runtime
 # value comes from summarization.context_file_max_chars when available.
 _DEFAULT_CONTEXT_FILE_MAX_CHARS = 20000
+_UPLOAD_CHUNK_BYTES = 1024 * 1024
+_DEFAULT_MAX_MEDIA_UPLOAD_BYTES = 5 * 1024 * 1024 * 1024
+_DEFAULT_MAX_CONTEXT_UPLOAD_BYTES = 50 * 1024 * 1024
+_SAFE_FILENAME_RE = re.compile(r"[^A-Za-z0-9._ -]+")
+
+
+def _env_int(name: str, default: int) -> int:
+    raw = os.getenv(name)
+    if raw is None:
+        return default
+    try:
+        return max(1, int(raw))
+    except ValueError:
+        logger.warning("Invalid integer env %s=%r; using %s", name, raw, default)
+        return default
+
+
+def _display_upload_filename(filename: str | None, default_name: str) -> str:
+    raw = (filename or "").replace("\\", "/")
+    name = Path(raw).name.strip()
+    return name or default_name
+
+
+def _safe_upload_filename(filename: str | None, default_name: str) -> str:
+    name = _display_upload_filename(filename, default_name)
+    safe_name = _SAFE_FILENAME_RE.sub("_", name).strip(" .")
+    if not safe_name:
+        safe_name = default_name
+    if len(safe_name) > 180:
+        suffix = Path(safe_name).suffix[:20]
+        stem = Path(safe_name).stem[:140].strip(" .") or "upload"
+        safe_name = f"{stem}{suffix}"
+    return safe_name
+
+
+async def _write_upload_to_path(
+    upload: UploadFile,
+    path: Path,
+    *,
+    max_bytes: int,
+) -> int:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    total = 0
+    try:
+        with open(path, "wb") as target:
+            while True:
+                chunk = await upload.read(_UPLOAD_CHUNK_BYTES)
+                if not chunk:
+                    break
+                total += len(chunk)
+                if total > max_bytes:
+                    target.close()
+                    path.unlink(missing_ok=True)
+                    raise HTTPException(
+                        status_code=413,
+                        detail="Uploaded file is too large",
+                    )
+                target.write(chunk)
+    except HTTPException:
+        raise
+    except Exception:
+        path.unlink(missing_ok=True)
+        raise
+    return total
 
 
 def _extract_text_from_file(
@@ -540,6 +605,8 @@ async def upload_audio(
     if not file.filename:
         raise HTTPException(status_code=400, detail="File must have a name")
 
+    display_filename = _display_upload_filename(file.filename, "uploaded_media")
+
     # Audio extensions go through ffmpeg's resample + mono-down path;
     # video extensions go through the same ffmpeg call which extracts
     # the audio track natively. The preprocessor (backend/core/audio.py)
@@ -547,7 +614,7 @@ async def upload_audio(
     allowed_audio = {".mp3", ".wav", ".m4a", ".flac", ".ogg", ".aac"}
     allowed_video = {".mp4", ".mov", ".avi", ".mkv", ".webm"}
     allowed_extensions = allowed_audio | allowed_video
-    file_ext = Path(file.filename).suffix.lower()
+    file_ext = Path(display_filename).suffix.lower()
 
     if file_ext not in allowed_extensions:
         raise HTTPException(
@@ -560,8 +627,12 @@ async def upload_audio(
         )
 
     # Create job with context + meeting type
+    stored_filename = _safe_upload_filename(
+        display_filename,
+        f"uploaded_media{file_ext}",
+    )
     job = MeetingJob(
-        filename=file.filename,
+        filename=display_filename,
         context=context or "",
         meeting_type=meeting_type,
         owner_username=user.username,
@@ -575,17 +646,23 @@ async def upload_audio(
     meeting_dir = orchestrator.get_meeting_dir(job.id)
 
     # Save uploaded audio file
-    audio_path = meeting_dir / "audio_original" / file.filename
+    audio_path = meeting_dir / "audio_original" / stored_filename
+    media_max_bytes = _env_int(
+        "VERITAS_MAX_MEDIA_UPLOAD_BYTES",
+        _DEFAULT_MAX_MEDIA_UPLOAD_BYTES,
+    )
 
     try:
-        audio_path.parent.mkdir(parents=True, exist_ok=True)
+        saved_size = await _write_upload_to_path(
+            file,
+            audio_path,
+            max_bytes=media_max_bytes,
+        )
 
-        content = await file.read()
-        with open(audio_path, "wb") as f:
-            f.write(content)
+        logger.info(f"Uploaded audio file: {audio_path} ({saved_size} bytes)")
 
-        logger.info(f"Uploaded audio file: {audio_path} ({len(content)} bytes)")
-
+    except HTTPException:
+        raise
     except Exception as e:
         logger.error(f"Failed to save uploaded file: {e}")
         raise HTTPException(status_code=500, detail="Failed to save audio file")
@@ -602,24 +679,42 @@ async def upload_audio(
     for ctx_file in context_files:
         if not ctx_file.filename:
             continue
-        ctx_ext = Path(ctx_file.filename).suffix.lower()
+        ctx_display_name = _display_upload_filename(
+            ctx_file.filename,
+            "context_file",
+        )
+        ctx_ext = Path(ctx_display_name).suffix.lower()
         if ctx_ext not in context_doc_exts:
             continue
         try:
-            ctx_path = meeting_dir / "context_files" / ctx_file.filename
-            ctx_path.parent.mkdir(parents=True, exist_ok=True)
-            ctx_content = await ctx_file.read()
-            with open(ctx_path, "wb") as f:
-                f.write(ctx_content)
+            ctx_safe_name = _safe_upload_filename(
+                ctx_display_name,
+                f"context_file{ctx_ext}",
+            )
+            ctx_path = meeting_dir / "context_files" / ctx_safe_name
+            await _write_upload_to_path(
+                ctx_file,
+                ctx_path,
+                max_bytes=_env_int(
+                    "VERITAS_MAX_CONTEXT_UPLOAD_BYTES",
+                    _DEFAULT_MAX_CONTEXT_UPLOAD_BYTES,
+                ),
+            )
             extracted = _extract_text_from_file(
                 ctx_path,
                 max_chars=context_file_max_chars,
             )
             if extracted:
-                job.context += f"\n\n[{ctx_file.filename}]:\n{extracted}"
-                logger.info(f"Extracted {len(extracted)} chars from {ctx_file.filename}")
+                job.context += f"\n\n[{ctx_display_name}]:\n{extracted}"
+                logger.info(
+                    "Extracted %s chars from %s",
+                    len(extracted),
+                    ctx_display_name,
+                )
+        except HTTPException:
+            raise
         except Exception as e:
-            logger.warning(f"Failed to process context file {ctx_file.filename}: {e}")
+            logger.warning(f"Failed to process context file {ctx_display_name}: {e}")
 
     job.context = job.context.strip()
 
@@ -650,8 +745,9 @@ async def upload_audio(
         resource_type="meeting",
         resource_id=job.id,
         details={
-            "filename": file.filename,
-            "size_bytes": len(content),
+            "filename": display_filename,
+            "stored_filename": stored_filename,
+            "size_bytes": saved_size,
             "has_context": bool(job.context),
             "meeting_type": meeting_type.value,
             "has_court_dictionary": bool(job.court_dictionary),
