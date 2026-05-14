@@ -59,7 +59,7 @@ chmod +x deploy/it-ubuntu/*.sh
 
 - Web UI должен оставаться на `127.0.0.1` до публикации через утвержденный
   reverse proxy, VPN или firewall.
-- Backend `8765` и vLLM `8001` не публиковать в LAN напрямую.
+- Backend `8765`, Ollama `11435` и vLLM `8001` не публиковать в LAN напрямую.
 - Сменить bootstrap admin password. Первый запуск генерирует случайный пароль и
   показывает его в терминале.
 - Для сетевого режима предпочтительно заранее задать
@@ -72,6 +72,7 @@ chmod +x deploy/it-ubuntu/*.sh
 ```bash
 docker scout cves epam-veritas-backend:1.0
 docker scout cves epam-veritas-frontend:1.0
+docker scout cves ollama/ollama:0.13.4
 docker scout cves vllm/vllm-openai:v0.18.2
 ```
 
@@ -80,13 +81,28 @@ docker scout cves vllm/vllm-openai:v0.18.2
 ```bash
 trivy image epam-veritas-backend:1.0
 trivy image epam-veritas-frontend:1.0
+trivy image ollama/ollama:0.13.4
 trivy image vllm/vllm-openai:v0.18.2
 ```
 
 ## VRAM policy
 
-Docker на RTX/GeForce обычно не отрезает жесткий VRAM-лимит контейнеру. Для LLM
-лимит задается через vLLM:
+Основной выверенный LLM baseline для пилота - Gemma 4 через Ollama:
+
+```bash
+COMPOSE_PROFILES=
+EPAM_SUMMARIZATION_PROVIDER=ollama
+EPAM_SUMMARIZATION_OLLAMA_BASE_URL=http://ollama:11434
+EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b
+OLLAMA_IMAGE=ollama/ollama:0.13.4
+VERITAS_READ_ONLY_ROOTFS=false
+```
+
+Qwen/Qwen3.6-27B через vLLM - только первый альтернативный кандидат для будущих
+экспериментов, не baseline для первичного развертывания.
+
+Docker на RTX/GeForce обычно не отрезает жесткий VRAM-лимит контейнеру. Для
+будущих vLLM-экспериментов лимит задается через:
 
 ```bash
 VERITAS_GPU_VRAM_BUDGET_GB=30

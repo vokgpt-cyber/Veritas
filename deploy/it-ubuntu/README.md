@@ -2,7 +2,7 @@
 
 This folder is the server handoff package for EPAM IT. Target environment:
 Ubuntu 22.04/24.04 LTS, NVIDIA GPU, Docker, pyannote Community-1, GigaAM, and
-vLLM/OpenAI-compatible summarization.
+Gemma 4 through Ollama for summarization.
 
 ## Files
 
@@ -11,7 +11,7 @@ vLLM/OpenAI-compatible summarization.
 - `START_VERITAS_UBUNTU.sh` - build/start launcher.
 - `STOP_VERITAS_UBUNTU.sh` - stop launcher.
 - `START_VERITAS_UBUNTU.desktop` - optional GUI launcher.
-- `MODEL_GUIDE.md` - model and VRAM guide.
+- `MODEL_GUIDE.md` - Gemma 4 baseline, model experiments, and VRAM guide.
 - `OPERATIONS_CHECKLIST.md` - operating checklist.
 - `SECURITY_REVIEW.md` - required security checklist before pilot exposure.
 
@@ -87,7 +87,7 @@ EPAM_FRONTEND_BIND=127.0.0.1
 EPAM_FRONTEND_PORT=5173
 ```
 
-Do not publish backend `8765` or vLLM `8001` to the LAN. To give users access,
+Do not publish backend `8765`, Ollama `11435`, or vLLM `8001` to the LAN. To give users access,
 put the frontend behind an IT-approved reverse proxy, VPN, or firewall rule.
 
 For non-local exposure, set a real admin password hash first:
@@ -113,6 +113,7 @@ docker compose --env-file deploy/it-ubuntu/.env.server \
 
 docker scout cves epam-veritas-backend:1.0
 docker scout cves epam-veritas-frontend:1.0
+docker scout cves ollama/ollama:0.13.4
 docker scout cves vllm/vllm-openai:v0.18.2
 ```
 
@@ -121,6 +122,7 @@ If Docker Scout is unavailable, use Trivy or Grype:
 ```bash
 trivy image epam-veritas-backend:1.0
 trivy image epam-veritas-frontend:1.0
+trivy image ollama/ollama:0.13.4
 trivy image vllm/vllm-openai:v0.18.2
 ```
 
@@ -138,7 +140,7 @@ VLLM_GPU_MEMORY_UTILIZATION=0.62
 VLLM_MAX_MODEL_LEN=65536
 ```
 
-For RTX 4090 48 GB:
+For RTX 4090 48 GB and future vLLM experiments:
 
 - 30 GB budget: `0.62`
 - 36 GB budget: `0.75`
@@ -149,19 +151,24 @@ Do not enable lower-quality fallback models just to complete the pipeline.
 
 ## LLM selection
 
-Default server mode uses vLLM:
+Default server mode uses the validated Gemma 4 baseline through Ollama:
 
 ```bash
-COMPOSE_PROFILES=vllm
-EPAM_SUMMARIZATION_PROVIDER=openai_compatible
-EPAM_SUMMARIZATION_OPENAI_BASE_URL=http://vllm:8000/v1
-EPAM_SUMMARIZATION_OLLAMA_MODEL=Qwen/Qwen3.6-27B
-VLLM_MODEL=Qwen/Qwen3.6-27B
-VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-27B
+COMPOSE_PROFILES=
+EPAM_SUMMARIZATION_PROVIDER=ollama
+EPAM_SUMMARIZATION_OLLAMA_BASE_URL=http://ollama:11434
+EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b
+OLLAMA_IMAGE=ollama/ollama:0.13.4
 ```
 
-When changing the model, update all three model-name fields together. Use only
-approved model IDs from `MODEL_GUIDE.md` unless IT reviews an exception.
+The Ollama service is part of the default compose stack. vLLM/Qwen remains behind
+the optional `vllm` profile and must not be enabled during the initial pilot
+deployment. Use only approved model IDs from `MODEL_GUIDE.md` unless IT reviews
+an exception.
+
+`VERITAS_READ_ONLY_ROOTFS=false` is the default for the first server deployment
+because torch/vLLM/Triton write runtime cache files. IT may switch it to `true`
+after a successful smoke test if all write paths are covered by volumes/tmpfs.
 
 Do not enable `--trust-remote-code` unless the exact model repository has been
 reviewed and pinned.
@@ -181,7 +188,13 @@ Backend:
 docker logs -f veritas-backend
 ```
 
-vLLM:
+Ollama:
+
+```bash
+docker logs -f veritas-ollama
+```
+
+vLLM experiments:
 
 ```bash
 docker logs -f veritas-vllm

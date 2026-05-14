@@ -76,6 +76,12 @@ if [[ "${VLLM_IMAGE:-}" == *":latest" ]]; then
   exit 4
 fi
 
+if [[ "${OLLAMA_IMAGE:-}" == *":latest" ]]; then
+  echo "[ERROR] OLLAMA_IMAGE must not use :latest for a server deployment."
+  echo "        Pin an approved tag or digest in ${ENV_FILE}."
+  exit 4
+fi
+
 if [ "${EPAM_FRONTEND_BIND:-127.0.0.1}" != "127.0.0.1" ] && [ -z "${EPAM_AUTH_DEFAULT_PASSWORD_HASH:-}" ]; then
   echo "[ERROR] Frontend is configured for non-local access, but no admin password hash is set."
   echo "        Set EPAM_AUTH_DEFAULT_PASSWORD_HASH before exposing VERITAS to the network."
@@ -95,7 +101,23 @@ else
 fi
 
 if [ -z "${HF_TOKEN:-}" ]; then
-  echo "[WARNING] HF_TOKEN is empty. First pyannote/vLLM model download may fail."
+  echo "[WARNING] HF_TOKEN is empty. First pyannote model download may fail."
+fi
+
+LLM_PROVIDER="${EPAM_SUMMARIZATION_PROVIDER:-ollama}"
+OLLAMA_MODEL="${EPAM_SUMMARIZATION_OLLAMA_MODEL:-gemma4:26b}"
+if [ "${LLM_PROVIDER}" = "ollama" ] && [ "${OLLAMA_MODEL}" != "gemma4:26b" ]; then
+  echo "[ERROR] Server baseline must start with Gemma 4 via Ollama."
+  echo "        Current EPAM_SUMMARIZATION_OLLAMA_MODEL=${OLLAMA_MODEL}"
+  echo "        Set EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b for pilot deployment."
+  echo "        Alternative models must be enabled deliberately after baseline validation."
+  exit 6
+fi
+
+if [[ ",${COMPOSE_PROFILES:-}," == *",vllm,"* ]] && [ "${LLM_PROVIDER}" != "openai_compatible" ]; then
+  echo "[ERROR] COMPOSE_PROFILES includes vllm, but EPAM_SUMMARIZATION_PROVIDER is ${LLM_PROVIDER}."
+  echo "        Remove vllm from COMPOSE_PROFILES for the Gemma/Ollama baseline."
+  exit 7
 fi
 
 TOTAL_MB="$(nvidia-smi --query-gpu=memory.total --format=csv,noheader,nounits | head -n 1 | tr -d ' ')"
@@ -115,6 +137,28 @@ echo
 
 cd "${REPO_ROOT}"
 docker compose --env-file "${ENV_FILE}" -f "${COMPOSE_FILE}" up --build -d
+
+if [ "${LLM_PROVIDER}" = "ollama" ]; then
+  echo
+  echo "[OLLAMA] Baseline LLM: ${OLLAMA_MODEL}"
+  echo "[OLLAMA] Waiting for Ollama service..."
+  for _ in $(seq 1 90); do
+    OLLAMA_STATUS="$(docker inspect -f '{{.State.Health.Status}}' veritas-ollama 2>/dev/null || true)"
+    if [ "${OLLAMA_STATUS}" = "healthy" ]; then
+      break
+    fi
+    sleep 2
+  done
+  OLLAMA_STATUS="$(docker inspect -f '{{.State.Health.Status}}' veritas-ollama 2>/dev/null || true)"
+  if [ "${OLLAMA_STATUS}" != "healthy" ]; then
+    echo "[ERROR] Ollama did not become healthy. Check logs:"
+    echo "        docker compose --env-file ${ENV_FILE} -f ${COMPOSE_FILE} logs -f ollama"
+    exit 8
+  fi
+  echo "[OLLAMA] Ensuring the model is available. The first pull can take a while."
+  docker exec veritas-ollama ollama pull "${OLLAMA_MODEL}"
+  docker exec veritas-ollama ollama show "${OLLAMA_MODEL}" >/dev/null
+fi
 
 echo
 echo "[WAIT] Waiting for backend health..."

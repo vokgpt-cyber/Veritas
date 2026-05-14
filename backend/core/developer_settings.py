@@ -9,6 +9,7 @@ eligible for production use.
 from __future__ import annotations
 
 import json
+import os
 from copy import deepcopy
 from datetime import datetime
 from pathlib import Path
@@ -17,7 +18,7 @@ from typing import Any
 from backend.app.paths import resolve_user_path
 
 
-SETTINGS_VERSION = 1
+SETTINGS_VERSION = 2
 
 
 def _settings_path() -> Path:
@@ -115,10 +116,9 @@ DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
             "provider": "ollama",
             "status": "production",
             "model": "gemma4:26b",
-            "base_url": "http://localhost:11434",
             "context_tokens": 262144,
             "structured_outputs": True,
-            "notes": "Current local quality default on RTX 3090.",
+            "notes": "Pilot baseline. Uses the runtime Ollama URL from environment/config.",
         },
         {
             "id": "qwen3-32b-vllm",
@@ -126,7 +126,7 @@ DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
             "provider": "openai_compatible",
             "status": "candidate",
             "model": "Qwen/Qwen3-32B",
-            "base_url": "http://localhost:8000/v1",
+            "base_url": "http://vllm:8000/v1",
             "context_tokens": 131072,
             "structured_outputs": True,
             "notes": "Ubuntu + 4090 48GB candidate. Validate VRAM and JSON quality.",
@@ -137,7 +137,7 @@ DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
             "provider": "openai_compatible",
             "status": "candidate",
             "model": "Qwen/Qwen3-30B-A3B",
-            "base_url": "http://localhost:8000/v1",
+            "base_url": "http://vllm:8000/v1",
             "context_tokens": 131072,
             "structured_outputs": True,
             "notes": "Candidate when throughput matters. Needs real transcript tests.",
@@ -148,7 +148,7 @@ DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
             "provider": "openai_compatible",
             "status": "experimental",
             "model": "mistralai/Mistral-Small-Instruct",
-            "base_url": "http://localhost:8000/v1",
+            "base_url": "http://vllm:8000/v1",
             "context_tokens": 32768,
             "structured_outputs": True,
             "notes": "Comparison candidate, not a Russian-default choice.",
@@ -159,7 +159,7 @@ DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
             "provider": "openai_compatible",
             "status": "experimental",
             "model": "deepseek-ai/DeepSeek-R1-Distill-Qwen-32B",
-            "base_url": "http://localhost:8000/v1",
+            "base_url": "http://vllm:8000/v1",
             "context_tokens": 131072,
             "structured_outputs": False,
             "notes": "Experimental only. Reasoning models can waste output budget.",
@@ -287,11 +287,36 @@ def load_settings() -> dict[str, Any]:
         save_settings(settings)
         return settings
 
-    # Merge in newly introduced defaults without overwriting local edits.
+    loaded_version = int(settings.get("version") or 0)
+
+    # Merge in newly introduced defaults without deleting local prompt edits.
     changed = False
     if "catalog" not in settings:
         settings["catalog"] = deepcopy(DEFAULT_MODEL_CATALOG)
         changed = True
+    else:
+        catalog = settings.setdefault("catalog", {})
+        for category, defaults in DEFAULT_MODEL_CATALOG.items():
+            existing = catalog.setdefault(category, [])
+            by_id = {entry.get("id"): entry for entry in existing}
+            for default_entry in defaults:
+                entry_id = default_entry.get("id")
+                if entry_id not in by_id:
+                    existing.append(deepcopy(default_entry))
+                    changed = True
+                    continue
+                # Refresh built-in model metadata that is operationally
+                # significant for the IT server package. This fixes old
+                # volumes where the catalog still pointed Gemma to localhost
+                # or treated Qwen/vLLM as the pilot default.
+                current = by_id[entry_id]
+                for key, value in default_entry.items():
+                    if current.get(key) != value:
+                        current[key] = deepcopy(value)
+                        changed = True
+                if entry_id == "gemma4-26b-ollama" and "base_url" in current:
+                    current.pop("base_url", None)
+                    changed = True
     if "prompts" not in settings:
         settings["prompts"] = deepcopy(DEFAULT_PROMPTS)
         changed = True
@@ -300,6 +325,18 @@ def load_settings() -> dict[str, Any]:
         if prompt["id"] not in existing_prompt_ids:
             settings["prompts"].append(deepcopy(prompt))
             changed = True
+    if loaded_version < 2:
+        active = settings.setdefault("active", {})
+        if active.get("llm") != "gemma4-26b-ollama":
+            active["llm"] = "gemma4-26b-ollama"
+            changed = True
+    if os.environ.get("VERITAS_BASELINE_LLM", "").strip():
+        active = settings.setdefault("active", {})
+        baseline = os.environ["VERITAS_BASELINE_LLM"].strip()
+        if find_catalog_entry(settings, "llm", baseline) is not None:
+            if active.get("llm") != baseline:
+                active["llm"] = baseline
+                changed = True
     if changed:
         save_settings(settings)
     return settings

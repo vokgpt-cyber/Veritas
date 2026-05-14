@@ -9,12 +9,14 @@ arbitrary model code execution.
 
 - Frontend now runs as a production static build behind unprivileged Nginx, not
   the Vite development server.
-- Frontend, backend, and vLLM containers use `no-new-privileges`, drop Linux
-  capabilities, use read-only root filesystems, and write only to explicit
-  volumes or tmpfs mounts.
+- Frontend, backend, Ollama, and vLLM containers use `no-new-privileges`, drop Linux
+  capabilities, and write model/runtime cache files only to explicit volumes or
+  tmpfs mounts. `VERITAS_READ_ONLY_ROOTFS=false` is the first-deploy default
+  because torch/vLLM/Triton need writable cache paths; IT may enable it after
+  smoke testing.
 - Server ports bind to `127.0.0.1` by default. Network access must go through an
   IT-approved reverse proxy, VPN, or firewall rule.
-- vLLM image is pinned to a version tag instead of `latest`.
+- Ollama and vLLM images are pinned to version tags instead of `latest`.
 - `--trust-remote-code` is not enabled by default. Do not enable it unless the
   exact model repository has been reviewed as executable code.
 - `ipc: host` was removed from the vLLM service.
@@ -38,6 +40,7 @@ docker compose --env-file deploy/it-ubuntu/.env.server \
 
 docker scout cves epam-veritas-backend:1.0
 docker scout cves epam-veritas-frontend:1.0
+docker scout cves ollama/ollama:0.13.4
 docker scout cves vllm/vllm-openai:v0.18.2
 ```
 
@@ -46,6 +49,7 @@ If Docker Scout is not available, use Trivy or Grype:
 ```bash
 trivy image epam-veritas-backend:1.0
 trivy image epam-veritas-frontend:1.0
+trivy image ollama/ollama:0.13.4
 trivy image vllm/vllm-openai:v0.18.2
 ```
 
@@ -57,7 +61,8 @@ the accepted risk and compensating controls.
 
 - Keep `EPAM_FRONTEND_BIND=127.0.0.1` until IT has placed VERITAS behind the
   approved access layer.
-- Do not publish backend port `8765` or vLLM port `8001` to the LAN.
+- Do not publish backend port `8765`, Ollama port `11435`, or vLLM port `8001`
+  to the LAN.
 - Allow outbound internet only during the model download window if possible.
   After model caches are populated, switch Hugging Face/Transformers offline
   flags to `1`.
@@ -81,6 +86,7 @@ the accepted risk and compensating controls.
 
 Treat every model repository as a dependency. For the 1.0 pilot:
 
+- Use Gemma 4 through Ollama as the pilot baseline.
 - Use only the model IDs listed in `MODEL_GUIDE.md` unless IT approves an
   exception.
 - Do not let pilot users add arbitrary Hugging Face model IDs.

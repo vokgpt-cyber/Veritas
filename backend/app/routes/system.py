@@ -223,6 +223,15 @@ async def system_info(user: TokenData = Depends(get_current_user)) -> dict:
             "config": {
                 "asr_model": config.asr.model,
                 "diarization_model": config.diarization.embedding_model,
+                "summarization_provider": getattr(
+                    config.summarization, "provider", "ollama"
+                ),
+                "summarization_base_url": (
+                    config.summarization.openai_base_url
+                    if getattr(config.summarization, "provider", "ollama")
+                    == "openai_compatible"
+                    else config.summarization.ollama_base_url
+                ),
                 "summarization_model": config.summarization.ollama_model,
                 "output_dir": config.output.output_dir,
             },

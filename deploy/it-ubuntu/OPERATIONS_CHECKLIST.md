@@ -54,7 +54,7 @@ Then restart:
 - Read `deploy/it-ubuntu/SECURITY_REVIEW.md`.
 - Keep `EPAM_FRONTEND_BIND=127.0.0.1` until reverse proxy/VPN/firewall rules are
   approved by IT.
-- Do not publish backend `8765` or vLLM `8001` to the LAN.
+- Do not publish backend `8765`, Ollama `11435`, or vLLM `8001` to the LAN.
 - Change the bootstrap admin password before pilot use.
 - Prefer `EPAM_AUTH_DEFAULT_PASSWORD_HASH` before non-local exposure.
 - Keep `PYANNOTE_METRICS_ENABLED=0`.
@@ -72,6 +72,7 @@ docker compose --env-file deploy/it-ubuntu/.env.server \
 
 docker scout cves epam-veritas-backend:1.0
 docker scout cves epam-veritas-frontend:1.0
+docker scout cves ollama/ollama:0.13.4
 docker scout cves vllm/vllm-openai:v0.18.2
 ```
 
@@ -80,6 +81,7 @@ Alternative scanner:
 ```bash
 trivy image epam-veritas-backend:1.0
 trivy image epam-veritas-frontend:1.0
+trivy image ollama/ollama:0.13.4
 trivy image vllm/vllm-openai:v0.18.2
 ```
 
@@ -89,7 +91,8 @@ ticket.
 ## 4. VRAM allocation policy
 
 Docker exposes GPU access. On GeForce RTX cards it does not reliably hard-slice
-VRAM per container. VERITAS controls the LLM VRAM budget through vLLM:
+VRAM per container. Baseline Gemma 4 runs through Ollama. For future vLLM
+experiments, the LLM VRAM budget is controlled through:
 
 ```bash
 VERITAS_GPU_VRAM_BUDGET_GB=30
@@ -114,9 +117,25 @@ Do not switch VERITAS to a lower-quality fallback just to complete the run.
 
 ## 5. LLM selection
 
-Recommended first server model:
+Baseline pilot model:
 
 ```bash
+COMPOSE_PROFILES=
+EPAM_SUMMARIZATION_PROVIDER=ollama
+EPAM_SUMMARIZATION_OLLAMA_BASE_URL=http://ollama:11434
+EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b
+OLLAMA_IMAGE=ollama/ollama:0.13.4
+VERITAS_READ_ONLY_ROOTFS=false
+```
+
+Leave `VERITAS_READ_ONLY_ROOTFS=false` for the first deployment. If IT wants to
+re-enable read-only root filesystems after smoke testing, verify torch/Triton
+cache writes first.
+
+First alternative candidate for later experiments only:
+
+```bash
+COMPOSE_PROFILES=vllm
 EPAM_SUMMARIZATION_PROVIDER=openai_compatible
 EPAM_SUMMARIZATION_OPENAI_BASE_URL=http://vllm:8000/v1
 EPAM_SUMMARIZATION_OLLAMA_MODEL=Qwen/Qwen3.6-27B
@@ -124,7 +143,7 @@ VLLM_MODEL=Qwen/Qwen3.6-27B
 VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-27B
 ```
 
-When changing model, update all three model-name fields together:
+When changing a vLLM model, update all three model-name fields together:
 
 ```bash
 EPAM_SUMMARIZATION_OLLAMA_MODEL=<model_id>
@@ -134,7 +153,14 @@ VLLM_SERVED_MODEL_NAME=<model_id>
 
 Then restart VERITAS.
 
-Check vLLM:
+Check Ollama:
+
+```bash
+docker logs -f veritas-ollama
+docker exec veritas-ollama ollama list
+```
+
+Check vLLM experiments:
 
 ```bash
 curl http://127.0.0.1:8001/v1/models
@@ -156,6 +182,7 @@ The update rebuilds containers but keeps Docker volumes:
 - Hugging Face cache;
 - Torch cache;
 - CTranslate2 cache;
+- Ollama cache;
 - vLLM cache.
 
 ## 7. Logs and diagnostics
@@ -171,6 +198,12 @@ Backend only:
 
 ```bash
 docker logs -f veritas-backend
+```
+
+Ollama only:
+
+```bash
+docker logs -f veritas-ollama
 ```
 
 vLLM only:

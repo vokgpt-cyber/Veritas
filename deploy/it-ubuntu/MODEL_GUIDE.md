@@ -1,110 +1,107 @@
 # VERITAS 1.0 LLM Guide for IT
 
-Цель VERITAS — не просто запустить самую большую модель, а стабильно получать
-полные юридически полезные протоколы и списки поручений. Поэтому модели делятся
-на рабочие кандидаты и экспериментальные SOTA-кандидаты.
+VERITAS 1.0 has one baseline LLM path and several future comparison candidates.
+For the pilot handoff, do not replace the baseline unless there is a separate
+A/B test on the same gold transcripts.
 
-## Рекомендуемый старт для RTX 4090 48 GB
+## Baseline for pilot deployment
 
-### 1. Qwen/Qwen3.6-27B
+### Gemma 4 26B through Ollama
 
-Рекомендуемый первый vLLM-кандидат для IT.
+This is the current validated VERITAS summarization setup. It produced the best
+practical protocol quality during the Windows RTX 3090 tuning sprint, so the
+Ubuntu server handoff should start here as well.
 
-- Тип: dense instruct model.
-- Сценарий: административные совещания, протоколы, списки поручений.
-- Настройки для первого теста:
+Server `.env.server` baseline:
 
 ```bash
+COMPOSE_PROFILES=
+EPAM_SUMMARIZATION_PROVIDER=ollama
+EPAM_SUMMARIZATION_OLLAMA_BASE_URL=http://ollama:11434
+EPAM_SUMMARIZATION_OLLAMA_MODEL=gemma4:26b
+OLLAMA_IMAGE=ollama/ollama:0.13.4
+OLLAMA_BIND=127.0.0.1
+OLLAMA_PORT=11435
+```
+
+The launcher runs:
+
+```bash
+docker exec veritas-ollama ollama pull gemma4:26b
+```
+
+on first start when the `ollama` profile is enabled.
+
+## Optional future experiments
+
+### Qwen/Qwen3.6-27B through vLLM
+
+This is the first alternative candidate for later IT experiments, not the pilot
+baseline.
+
+```bash
+COMPOSE_PROFILES=vllm
+EPAM_SUMMARIZATION_PROVIDER=openai_compatible
+EPAM_SUMMARIZATION_OPENAI_BASE_URL=http://vllm:8000/v1
+EPAM_SUMMARIZATION_OLLAMA_MODEL=Qwen/Qwen3.6-27B
+VLLM_IMAGE=vllm/vllm-openai:v0.18.2
 VLLM_MODEL=Qwen/Qwen3.6-27B
 VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-27B
 VLLM_GPU_MEMORY_UTILIZATION=0.62
 VLLM_MAX_MODEL_LEN=65536
 ```
 
-Если модель стартует стабильно и остается свободная VRAM, можно поднять:
+Use it only after Gemma 4 is running and there is a stable comparison dataset.
+
+### Larger SOTA candidates
+
+Keep these in a watchlist until IT validates memory, chat template, JSON
+stability, speed, and security:
+
+- Qwen/Qwen3.6-35B-A3B
+- Qwen/Qwen3-Next-80B-A3B-Instruct-FP8
+- moonshotai/Kimi-K2.6
+- DeepSeek V4 / V4-Flash
+- GLM-5.1
+- MiniMax M2.7
+
+Some of these may need more than one 48 GB GPU, reduced context, quantization,
+or `trust_remote_code`. Do not enable `trust_remote_code` unless the exact model
+repository has been reviewed as executable code and pinned.
+
+## VRAM rule
+
+Docker on RTX/GeForce usually does not hard-partition VRAM per container.
+
+For Gemma 4 through Ollama, the operational rule is simple: keep the GPU free
+for VERITAS during processing and expect an explicit error if the model cannot
+fit.
+
+For later vLLM experiments, use:
 
 ```bash
-VLLM_GPU_MEMORY_UTILIZATION=0.75
-VLLM_MAX_MODEL_LEN=131072
+VLLM_GPU_MEMORY_UTILIZATION=<budget_gb / total_vram_gb>
 ```
 
-### 2. Gemma 4 26B / 31B
+For RTX 4090 48 GB:
 
-Надежный baseline. На Windows-станции уже показал практическое улучшение
-качества протоколов.
+- 30 GB budget: `0.62`
+- 36 GB budget: `0.75`
+- 40 GB budget: `0.83`
 
-- Для Windows сейчас используется Ollama: `gemma4:26b`.
-- На Ubuntu можно оставить как baseline через Ollama или добавить vLLM-совместимую
-  сборку, если IT отдельно ее валидирует.
+If a model does not fit, do not silently fall back to a weaker model just to
+complete the run. Quality is the priority.
 
-### 3. Qwen/Qwen3.6-35B-A3B
+## How to compare models
 
-Более рискованный MoE-кандидат.
-
-- Тип: MoE, меньше активных параметров на токен.
-- Плюс: потенциально быстрее/дешевле dense-модели похожего класса.
-- Риск: нужно отдельно проверить chat template, JSON и стабильность длинного
-  контекста.
-
-Первый тест:
-
-```bash
-VLLM_MODEL=Qwen/Qwen3.6-35B-A3B
-VLLM_SERVED_MODEL_NAME=Qwen/Qwen3.6-35B-A3B
-VLLM_GPU_MEMORY_UTILIZATION=0.75
-VLLM_MAX_MODEL_LEN=65536
-```
-
-### 4. Qwen/Qwen3-Next-80B-A3B-Instruct-FP8
-
-Экспериментальный длинноконтекстный кандидат.
-
-- Может быть очень интересен по качеству.
-- На одной 48 GB карте нужно начинать с ограниченного контекста.
-- Не считать production-кандидатом до A/B на золотых файлах.
-
-Первый тест:
-
-```bash
-VLLM_MODEL=Qwen/Qwen3-Next-80B-A3B-Instruct-FP8
-VLLM_SERVED_MODEL_NAME=Qwen/Qwen3-Next-80B-A3B-Instruct-FP8
-VLLM_GPU_MEMORY_UTILIZATION=0.85
-VLLM_MAX_MODEL_LEN=32768
-```
-
-### 5. moonshotai/Kimi-K2.6
-
-SOTA-experimental candidate.
-
-- Очень сильная модель по рынку, но крупная и тяжелая.
-- Для одной RTX 4090 48 GB это лабораторный режим, не production baseline.
-- Подходит для проверки гипотезы "можно ли получить заметно более полный список
-  поручений", но только после того, как стабильный pipeline уже работает.
-
-## Watchlist, не основной список 1.0
-
-- DeepSeek V4 / V4-Flash: сильные модели, но слишком тяжелые для простого
-  production-профиля на одной 48 GB GPU.
-- GLM-5.1: сильный SOTA-кандидат, требует отдельной серверной проверки.
-- MiniMax M2.7: интересен для документов и рабочих задач, но тяжелый.
-- Xiaomi MiMo V2.5 Pro: мощный, но скорее multi-GPU candidate.
-
-## Как выбирать модель
-
-1. Сначала запускаем самую реалистичную модель: `Qwen/Qwen3.6-27B`.
-2. Проверяем, что vLLM стартует и `/v1/models` показывает модель.
-3. В VERITAS Developer Settings выбираем OpenAI-compatible LLM.
-4. Прогоняем одинаковые gold-транскрипты.
-5. Сравниваем не красоту текста, а:
-   - сколько решений найдено;
-   - сколько поручений найдено;
-   - есть ли исполнитель;
-   - есть ли срок;
-   - есть ли цитата/таймкод;
-   - нет ли выдуманных поручений.
-
-## Правило качества
-
-Если модель не помещается в VRAM или не держит нужный контекст, ее не надо
-"дожимать" скрытым fallback. Нужно выбрать другую модель, уменьшить контекст
-осознанно или увеличить GPU-бюджет.
+1. Keep ASR and diarization fixed.
+2. Run the same gold transcripts through Gemma 4 and the candidate model.
+3. Compare practical output, not just style:
+   - number of real decisions found;
+   - number of action items found;
+   - responsible party;
+   - deadline;
+   - quote/timecode support;
+   - absence of invented tasks.
+4. Promote a candidate only if it beats Gemma 4 on the actual EPAM meeting and
+   court-hearing material.

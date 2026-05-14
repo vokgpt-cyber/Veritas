@@ -111,13 +111,10 @@ class SummarizationEngine(BaseEngine):
         available_models = [
             m.get("name", "") for m in tags_data.get("models", [])
         ]
-        # Ollama tags may include :latest suffix; match flexibly
-        model_found = any(
-            self._model_name in m or m.startswith(self._model_name.split(":")[0])
-            for m in available_models
-        )
+        # Exact tag match: do not let Gemma 3 or Qwen masquerade as Gemma 4.
+        model_found = self._model_name in available_models
         if not model_found:
-            logger.warning(
+            raise RuntimeError(
                 f"Model '{self._model_name}' not found in Ollama. "
                 f"Available: {available_models}. "
                 f"Pull it with: ollama pull {self._model_name}"

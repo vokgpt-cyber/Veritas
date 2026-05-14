@@ -7,9 +7,11 @@ court hearing stenograms, administrative meeting protocols, and action-list
 drafting.
 
 Security handoff update: the IT Ubuntu package now includes a production Nginx
-frontend, local-only binds by default, hardened Compose services, pinned vLLM
-image tag, no default `--trust-remote-code`, safer upload handling, dependency
-CVE updates, and `deploy/it-ubuntu/SECURITY_REVIEW.md`.
+frontend, local-only binds by default, Gemma 4 via Ollama as the pilot LLM
+baseline, practical Docker write paths for torch/Triton caches, pinned
+Ollama/vLLM image tags, no default
+`--trust-remote-code`, safer upload handling, dependency CVE updates, and
+`deploy/it-ubuntu/SECURITY_REVIEW.md`.
 
 ## Scope
 
@@ -23,7 +25,7 @@ CVE updates, and `deploy/it-ubuntu/SECURITY_REVIEW.md`.
 
 - ASR: GigaAM for Russian recordings, with no silent quality-reducing fallback.
 - Diarization: pyannote `speaker-diarization-community-1`.
-- Summarization: Gemma 4 26B via Ollama on the Windows workstation.
+- Summarization: Gemma 4 26B via Ollama.
 - Administrative protocols use the practical structure focused on participants,
   decisions, theses, and action items.
 - Court hearings use exact speaker-count controls, case dictionary context, and
