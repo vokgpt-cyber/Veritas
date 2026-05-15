@@ -258,23 +258,14 @@ class Orchestrator:
         Instantiation is cheap (no model load); the real VRAM hit
         happens later in `.load()`. Swapping the instance after
         preprocessing is free."""
-        if self._audio is not None:
-            # Non-ASR already loaded; re-instantiate ASR placeholder in
-            # case meeting_type override changed between jobs.
-            self._instantiate_asr(
-                self._resolve_asr_engine(
-                    audio_path=None, meeting_type=meeting_type
-                )
-            )
-            return
-
         from backend.core.audio import AudioPreprocessor
         from backend.core.aligner import TranscriptAligner
         from backend.core.qa import QualityAssurance
         from backend.core.formatter import ProtocolFormatter
         from backend.engine.summarization import SummarizationEngine
 
-        self._audio = AudioPreprocessor()
+        if self._audio is None:
+            self._audio = AudioPreprocessor()
 
         # Pre-preprocessing: pick placeholder ASR (gigaam if "auto",
         # else the explicit config value). Real language-based routing
@@ -283,26 +274,31 @@ class Orchestrator:
             self._resolve_asr_engine(audio_path=None, meeting_type=meeting_type)
         )
 
-        # Select diarization engine based on config. Production quality
-        # policy: pyannote Community-1 is the only supported diarization
-        # engine. Do not silently fall back to weaker engines because
-        # speaker attribution quality is part of the legal record.
-        diarization_engine = self._config.diarization.engine.lower()
-        if diarization_engine != "pyannote":
-            raise RuntimeError(
-                "Unsupported diarization engine. VERITAS production pipeline "
-                "requires pyannote speaker-diarization-community-1."
-            )
+        if self._diarization is None:
+            # Select diarization engine based on config. Production quality
+            # policy: pyannote Community-1 is the only supported diarization
+            # engine. Do not silently fall back to weaker engines because
+            # speaker attribution quality is part of the legal record.
+            diarization_engine = self._config.diarization.engine.lower()
+            if diarization_engine != "pyannote":
+                raise RuntimeError(
+                    "Unsupported diarization engine. VERITAS production pipeline "
+                    "requires pyannote speaker-diarization-community-1."
+                )
 
-        from backend.engine.pyannote_diarization import PyannoteDiarizationEngine
+            from backend.engine.pyannote_diarization import PyannoteDiarizationEngine
 
-        self._diarization = PyannoteDiarizationEngine(self._config)
-        self._logger.info("Using pyannote-audio diarization engine")
+            self._diarization = PyannoteDiarizationEngine(self._config)
+            self._logger.info("Using pyannote-audio diarization engine")
 
-        self._summarization = SummarizationEngine(self._config)
-        self._aligner = TranscriptAligner()
-        self._qa = QualityAssurance(self._config)
-        self._formatter = ProtocolFormatter()
+        if self._summarization is None:
+            self._summarization = SummarizationEngine(self._config)
+        if self._aligner is None:
+            self._aligner = TranscriptAligner()
+        if self._qa is None:
+            self._qa = QualityAssurance(self._config)
+        if self._formatter is None:
+            self._formatter = ProtocolFormatter()
 
     async def process_meeting(
         self,
