@@ -190,6 +190,12 @@ class Orchestrator:
             if mix.is_english_heavy(threshold):
                 return "whisper"
             return "gigaam"
+        except Exception as exc:  # noqa: BLE001
+            self._logger.warning(
+                "Language detection failed (%s) -- defaulting to GigaAM",
+                exc,
+            )
+            return "gigaam"
         finally:
             # Always free the tiny model before the heavy ASR loads.
             detector.unload()
@@ -270,9 +276,10 @@ class Orchestrator:
         # Pre-preprocessing: pick placeholder ASR (gigaam if "auto",
         # else the explicit config value). Real language-based routing
         # happens after we have preprocessed audio — see process_meeting.
-        self._instantiate_asr(
-            self._resolve_asr_engine(audio_path=None, meeting_type=meeting_type)
-        )
+        if self._asr is None or self._asr_engine_name is not None:
+            self._instantiate_asr(
+                self._resolve_asr_engine(audio_path=None, meeting_type=meeting_type)
+            )
 
         if self._diarization is None:
             # Select diarization engine based on config. Production quality
@@ -372,6 +379,15 @@ class Orchestrator:
                     "ASR engine forced by per-job override: %s",
                     resolved_engine,
                 )
+            elif self._asr is not None and self._asr_engine_name is None:
+                # Test harnesses and a few diagnostic scripts inject a mock
+                # ASR engine directly. Preserve that engine instead of
+                # replacing it with the config-derived class.
+                resolved_engine = None
+                self._logger.info(
+                    "Using pre-initialized ASR engine instance: %s",
+                    self._asr.__class__.__name__,
+                )
             else:
                 # When config.asr.engine == "auto", language detection
                 # on the audio picks gigaam (Russian) or whisper
@@ -382,17 +398,18 @@ class Orchestrator:
                     audio_path=preprocessed_path,
                     meeting_type=job.meeting_type,
                 )
-            if resolved_engine != self._asr_engine_name:
+            if resolved_engine is not None and resolved_engine != self._asr_engine_name:
                 self._logger.info(
                     "Re-routing ASR post-detection: %s -> %s",
                     self._asr_engine_name,
                     resolved_engine,
                 )
                 self._instantiate_asr(resolved_engine)
+            final_asr_name = self._asr_engine_name or self._asr.__class__.__name__
             self._logger.info(
                 "Meeting %s: final ASR engine = %s (meeting_type=%s)",
                 job.id,
-                self._asr_engine_name,
+                final_asr_name,
                 job.meeting_type.value if hasattr(job.meeting_type, "value")
                 else job.meeting_type,
             )
@@ -434,10 +451,10 @@ class Orchestrator:
             except Exception as exc:  # noqa: BLE001
                 self._logger.error(
                     "ASR engine %r load failed: %s",
-                    self._asr_engine_name, exc,
+                    final_asr_name, exc,
                 )
                 raise RuntimeError(
-                    f"ASR engine {self._asr_engine_name!r} failed to load. "
+                    f"ASR engine {final_asr_name!r} failed to load. "
                     "VERITAS did not switch to another ASR engine automatically."
                 ) from exc
 
@@ -796,11 +813,10 @@ class Orchestrator:
                 if protocol_result is None:
                     raise RuntimeError("Summarization failed")
 
-                # ProtocolResult wraps a type-specific payload. The legacy
-                # formatter + QA path operates on MeetingProtocol; new
-                # types (court hearing, admin, client, interview) go
-                # through the type-aware formatter dispatch below.
-                protocol = protocol_result.payload
+                # ProtocolResult wraps a type-specific payload. Some tests
+                # and legacy summarization paths still return MeetingProtocol
+                # directly, so accept both shapes.
+                protocol = getattr(protocol_result, "payload", protocol_result)
 
                 # Lightweight completeness signal for admin meetings. This
                 # does not block delivery; it writes an audit JSON so we can

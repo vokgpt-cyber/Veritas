@@ -213,10 +213,17 @@ class ProtocolFormatter:
         output_path = Path(output_path)
         output_path.parent.mkdir(parents=True, exist_ok=True)
 
-        data = {
-            "meeting_type": meeting_type,
-            "payload": payload.model_dump(mode="json"),
-        }
+        if isinstance(payload, MeetingProtocol):
+            # Keep the legacy generic JSON shape flat for backwards
+            # compatibility with older tests/tools that read `topic`,
+            # `participants`, etc. at the top level.
+            data = payload.model_dump(mode="json")
+            data.setdefault("meeting_type", meeting_type)
+        else:
+            data = {
+                "meeting_type": meeting_type,
+                "payload": payload.model_dump(mode="json"),
+            }
 
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2, ensure_ascii=False)
@@ -393,12 +400,13 @@ class ProtocolFormatter:
         doc.add_page_break()
 
     @staticmethod
-    def _format_timestamp(seconds: float, hms: bool) -> str:
-        """Format an audio offset for display next to a stenogram turn.
+    def _format_timestamp(seconds: float, hms: Optional[bool] = None) -> str:
+        """Format an audio offset for display next to a transcript turn.
 
         Args:
             seconds: Offset from audio start.
             hms: If True, render `[HH:MM:SS]`. If False, render `[MM:SS]`.
+                If None, render legacy `HH:MM:SS` without brackets.
                 Pick HMS when any turn in the document is >= 1h so the
                 format is consistent across the whole transcript.
         """
@@ -408,6 +416,8 @@ class ProtocolFormatter:
             return ""
         h, rem = divmod(total, 3600)
         m, s = divmod(rem, 60)
+        if hms is None:
+            return f"{h:02d}:{m:02d}:{s:02d}"
         if hms:
             return f"[{h:02d}:{m:02d}:{s:02d}]"
         return f"[{(h * 60 + m):02d}:{s:02d}]"
