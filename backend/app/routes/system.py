@@ -50,7 +50,7 @@ async def system_health(user: TokenData = Depends(get_current_user)) -> dict:
             "cpu_percent": cpu_percent,
             "memory_percent": memory.percent,
             "memory_available_gb": memory.available / (1024**3),
-            "active_jobs": len(orchestrator.list_jobs()),
+            "active_jobs": orchestrator.active_job_count(),
         }
 
     except Exception as e:
@@ -80,7 +80,8 @@ async def gpu_status(user: TokenData = Depends(get_current_user)) -> dict:
 
         return {
             **status,
-            "is_available": vram.is_gpu_available,
+            "is_available": vram.is_gpu_available
+            or not bool(status.get("is_dummy", False)),
         }
 
     except Exception as e:

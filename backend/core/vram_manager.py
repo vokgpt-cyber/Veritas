@@ -72,6 +72,8 @@ class VRAMManager:
                 "temperature": float(temp),
                 "device_name": device_name,
                 "current_model": self._current_model,
+                "source": "pynvml",
+                "is_dummy": False,
             }
 
         except ImportError:
@@ -93,7 +95,7 @@ class VRAMManager:
             result = subprocess.run(
                 [
                     "nvidia-smi",
-                    "--query-gpu=memory.used,memory.total,temperature.gpu,name",
+                    "--query-gpu=memory.used,memory.total,utilization.gpu,temperature.gpu,name",
                     "--format=csv,nounits,noheader",
                 ],
                 capture_output=True,
@@ -105,22 +107,25 @@ class VRAMManager:
                 return self._get_dummy_status()
 
             parts = result.stdout.strip().split(", ")
-            if len(parts) < 4:
+            if len(parts) < 5:
                 return self._get_dummy_status()
 
             used_mb = float(parts[0])
             total_mb = float(parts[1])
-            temp = float(parts[2])
-            device_name = parts[3]
+            util = float(parts[2])
+            temp = float(parts[3])
+            device_name = parts[4]
 
             return {
                 "vram_used_gb": used_mb / 1024,
                 "vram_total_gb": total_mb / 1024,
                 "vram_free_gb": (total_mb - used_mb) / 1024,
-                "gpu_utilization": 0.0,
+                "gpu_utilization": util,
                 "temperature": temp,
                 "device_name": device_name,
                 "current_model": self._current_model,
+                "source": "nvidia-smi",
+                "is_dummy": False,
             }
 
         except Exception as e:
@@ -137,6 +142,8 @@ class VRAMManager:
             "temperature": 0.0,
             "device_name": "CPU",
             "current_model": self._current_model,
+            "source": "unavailable",
+            "is_dummy": True,
         }
 
     def check_available(self, required_gb: float) -> bool:

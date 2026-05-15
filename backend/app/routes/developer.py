@@ -62,6 +62,14 @@ def _get_orchestrator():
 def _apply_runtime_model_settings(settings: dict[str, Any]) -> None:
     """Apply selected model manifest entries to the in-memory config."""
     orchestrator = _get_orchestrator()
+    if orchestrator.has_active_job():
+        raise HTTPException(
+            status_code=409,
+            detail=(
+                "Pipeline settings cannot be changed while a meeting is "
+                "processing. Wait for the current job to finish or fail, then retry."
+            ),
+        )
     config = orchestrator._config
     active = settings.get("active", {})
 
@@ -166,8 +174,8 @@ async def update_active_pipeline(
         active["profile"] = updates["profile"]
 
     settings["active"] = active
-    save_settings(settings)
     _apply_runtime_model_settings(settings)
+    save_settings(settings)
     audit_log(
         action=AuditAction.SYSTEM_CONFIG_CHANGE,
         username=user.username,

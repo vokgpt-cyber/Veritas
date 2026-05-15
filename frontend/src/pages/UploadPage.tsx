@@ -101,9 +101,9 @@ const UPLOAD_COPY = {
     asrEngine: "Recognition engine",
     whisperxInstall: "Not installed. Run",
     vramLowTitle:
-      "Not enough free GPU memory. Close other GPU applications and try again.",
+      "Not enough free GPU memory for the quality pipeline. Close other GPU applications and try again.",
     vramLow:
-      "Button is locked: GPU is busy. Free video memory and refresh the GPU indicator above.",
+      "Button is locked: less than 14 GB VRAM is free. Free video memory and refresh the GPU indicator above.",
     uploading: "Uploading...",
     start: "Start Processing",
     security:
@@ -162,9 +162,9 @@ const UPLOAD_COPY = {
     asrEngine: "Движок распознавания",
     whisperxInstall: "Не установлен. Запустите",
     vramLowTitle:
-      "Недостаточно свободной видеопамяти. Закройте другие GPU-приложения и попробуйте снова.",
+      "Недостаточно свободной видеопамяти для качественного пайплайна. Закройте другие GPU-приложения и попробуйте снова.",
     vramLow:
-      "Кнопка заблокирована: GPU занят. Освободите видеопамять и обновите индикатор выше.",
+      "Кнопка заблокирована: свободно меньше 14 ГБ VRAM. Освободите видеопамять и обновите индикатор выше.",
     uploading: "Загрузка...",
     start: "Начать обработку",
     security:
@@ -259,8 +259,8 @@ export default function UploadPage() {
   // button when memory is too low to start the pipeline. Without
   // this the user uploads, waits 1-2 min for preprocessing +
   // language detection, then sees a cryptic mid-pipeline VRAM error.
-  // Threshold: 4 GB matches the backend pre-flight (smallest ASR
-  // engine, GigaAM, needs ~3 GB; we leave 1 GB margin).
+  // Threshold: 14 GB matches the backend's conservative quality-mode
+  // pre-flight for GigaAM batch inference with safety margin.
   const [gpu, setGpu] = useState<GpuStatusType | null>(null);
   useEffect(() => {
     let cancelled = false;
@@ -286,7 +286,7 @@ export default function UploadPage() {
     }
   }, [meetingType]);
   const vramLow =
-    gpu !== null && gpu.is_available && gpu.vram_free_gb < 4.0;
+    gpu !== null && gpu.is_available && gpu.vram_free_gb < 14.0;
 
   // Load the shared employee directory. Default admin attendees are
   // preselected, and the operator can adjust the actual attendance.

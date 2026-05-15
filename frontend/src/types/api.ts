@@ -506,6 +506,8 @@ export interface GpuStatus {
   device_name: string;
   current_model: string | null;
   is_available: boolean;
+  source?: string;
+  is_dummy?: boolean;
 }
 
 /** System stats response. */

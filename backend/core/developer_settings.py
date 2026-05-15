@@ -18,13 +18,18 @@ from typing import Any
 from backend.app.paths import resolve_user_path
 
 
-SETTINGS_VERSION = 2
+SETTINGS_VERSION = 3
 
 
 def _settings_path() -> Path:
     path = resolve_user_path("data/developer/settings.json")
     path.parent.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def _default_profile_id() -> str:
+    """Default profile may be supplied by server deployment env."""
+    return os.environ.get("VERITAS_DEFAULT_PROFILE", "rtx3090_quality").strip() or "rtx3090_quality"
 
 
 DEFAULT_MODEL_CATALOG: dict[str, list[dict[str, Any]]] = {
@@ -237,7 +242,7 @@ def default_settings() -> dict[str, Any]:
         "version": SETTINGS_VERSION,
         "updated_at": datetime.utcnow().isoformat(),
         "active": {
-            "profile": "rtx3090_quality",
+            "profile": _default_profile_id(),
             "asr": "asr-auto-quality",
             "diarization": "pyannote-community-1",
             "llm": "gemma4-26b-ollama",
@@ -250,8 +255,8 @@ def default_settings() -> dict[str, Any]:
             },
             {
                 "id": "rtx4090_vllm_quality",
-                "name": "Ubuntu RTX 4090 48GB + vLLM",
-                "description": "Server target profile for vLLM/OpenAI-compatible LLM serving.",
+                "name": "Ubuntu RTX 4090 48GB server",
+                "description": "Server profile. Gemma 4/Ollama is baseline; vLLM is optional for later experiments.",
             },
             {
                 "id": "court_max_quality",
@@ -320,6 +325,23 @@ def load_settings() -> dict[str, Any]:
     if "prompts" not in settings:
         settings["prompts"] = deepcopy(DEFAULT_PROMPTS)
         changed = True
+    default_profiles = {
+        p["id"]: p for p in default_settings().get("profiles", [])
+    }
+    existing_profiles = settings.setdefault("profiles", [])
+    existing_profile_ids = {p.get("id") for p in existing_profiles}
+    for profile in existing_profiles:
+        default_profile = default_profiles.get(profile.get("id"))
+        if not default_profile:
+            continue
+        for key in ("name", "description"):
+            if profile.get(key) != default_profile.get(key):
+                profile[key] = default_profile[key]
+                changed = True
+    for profile_id, profile in default_profiles.items():
+        if profile_id not in existing_profile_ids:
+            existing_profiles.append(deepcopy(profile))
+            changed = True
     existing_prompt_ids = {p.get("id") for p in settings.get("prompts", [])}
     for prompt in DEFAULT_PROMPTS:
         if prompt["id"] not in existing_prompt_ids:
@@ -329,6 +351,13 @@ def load_settings() -> dict[str, Any]:
         active = settings.setdefault("active", {})
         if active.get("llm") != "gemma4-26b-ollama":
             active["llm"] = "gemma4-26b-ollama"
+            changed = True
+    default_profile = _default_profile_id()
+    profile_ids = {p.get("id") for p in settings.get("profiles", [])}
+    if default_profile in profile_ids:
+        active = settings.setdefault("active", {})
+        if active.get("profile") != default_profile:
+            active["profile"] = default_profile
             changed = True
     if os.environ.get("VERITAS_BASELINE_LLM", "").strip():
         active = settings.setdefault("active", {})

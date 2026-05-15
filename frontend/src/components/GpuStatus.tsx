@@ -3,9 +3,9 @@
  *
  * Polls /api/system/gpu every refreshSec seconds, shows free/used/total
  * VRAM with a colour-coded bar:
- *   - green when free > 8 GB
- *   - amber when 4-8 GB (можно запускать, но впритык)
- *   - red when < 4 GB (минимум для GigaAM ASR; пайплайн не запустится)
+ *   - green when free >= 16 GB
+ *   - amber when 14-16 GB (quality ASR may run, but with little margin)
+ *   - red when < 14 GB (quality pipeline should not start)
  *
  * Used on UploadPage (gates the submit button), ProcessingPage (lets
  * the user see why VRAM ran out mid-run), and SystemPage (general
@@ -20,7 +20,7 @@ import type { GpuStatus as GpuStatusType } from "../types/api";
 interface Props {
   /** Polling interval in seconds. 0 disables auto-refresh. */
   refreshSec?: number;
-  /** Hide when GPU is healthy (free > 8 GB). Useful on UploadPage
+  /** Hide when GPU is healthy (free >= 16 GB). Useful on UploadPage
    * where the indicator only matters when there's a problem. */
   hideWhenHealthy?: boolean;
   /** Optional className passthrough. */
@@ -76,12 +76,12 @@ export default function GpuStatus({
   const freeFraction = total > 0 ? free / total : 0;
 
   // Color thresholds:
-  //   <4 GB free  → red   (won't fit even smallest engine)
-  //   4-8 GB free → amber (will fit ASR but tight; diarization may fail)
-  //   >8 GB free  → green
+  //   <14 GB free  -> red   (quality GigaAM batch needs more headroom)
+  //   14-16 GB free -> amber (can run, but close other GPU apps if possible)
+  //   >=16 GB free -> green
   let tone: "green" | "amber" | "red";
-  if (free < 4) tone = "red";
-  else if (free < 8) tone = "amber";
+  if (free < 14) tone = "red";
+  else if (free < 16) tone = "amber";
   else tone = "green";
 
   if (hideWhenHealthy && tone === "green") return null;
@@ -156,15 +156,15 @@ export default function GpuStatus({
 
       {tone === "red" && (
         <p className="mt-2 text-xs text-red-700 leading-relaxed">
-          Меньше 4 ГБ свободно — пайплайн не запустится. Закройте другие
+          Меньше 14 ГБ свободно — качественный пайплайн не запустится. Закройте другие
           GPU-приложения (LM Studio, Stable Diffusion, ChatGPT desktop,
           игры в фоне) и нажмите «Обновить».
         </p>
       )}
       {tone === "amber" && (
         <p className="mt-2 text-xs text-amber-700 leading-relaxed">
-          Памяти впритык. ASR запустится, но диаризация (нужно ~9.5 ГБ)
-          может не пройти. Желательно освободить ещё 4–5 ГБ перед запуском.
+          Памяти впритык. ASR может запуститься, но запас маленький.
+          Желательно освободить ещё 2–3 ГБ перед запуском.
         </p>
       )}
     </div>

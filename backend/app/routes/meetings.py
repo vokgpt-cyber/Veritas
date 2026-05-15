@@ -46,6 +46,33 @@ def _env_int(name: str, default: int) -> int:
         return default
 
 
+def _estimated_start_vram_gb(config, asr_engine_override: Optional[str] = None) -> float:
+    """Conservative free-VRAM requirement before starting a quality run."""
+    engine = (asr_engine_override or config.asr.engine or "auto").lower()
+    if engine in {"auto", "gigaam"}:
+        try:
+            batch_size = int(getattr(config.asr, "gigaam_batch_size", 16) or 16)
+        except Exception:
+            batch_size = 16
+        if batch_size >= 16:
+            required = 12.0
+        elif batch_size >= 8:
+            required = 8.0
+        elif batch_size >= 4:
+            required = 6.0
+        else:
+            required = 4.0
+    elif engine == "hf-whisper":
+        required = 8.0
+    elif engine == "whisperx":
+        required = 5.0
+    elif engine in {"qwen", "whisper"}:
+        required = 4.0
+    else:
+        required = 4.0
+    return required + 2.0
+
+
 def _display_upload_filename(filename: str | None, default_name: str) -> str:
     raw = (filename or "").replace("\\", "/")
     name = Path(raw).name.strip()
@@ -556,22 +583,40 @@ async def upload_audio(
     """
     orchestrator = get_orchestrator()
 
+    # Validate ASR engine override early so pre-flight checks use a known engine.
+    if asr_engine_override is not None:
+        valid_engines = {
+            "auto", "gigaam", "hf-whisper", "whisper", "whisperx",
+            "qwen", "nemo",
+        }
+        if asr_engine_override not in valid_engines:
+            raise HTTPException(
+                status_code=400,
+                detail=(
+                    f"Invalid asr_engine_override: {asr_engine_override!r}. "
+                    f"Valid: {sorted(valid_engines)}"
+                ),
+            )
+
     # Pre-flight VRAM check (2026-04-28): prior failure was 1-2 min into
     # the pipeline because another GPU app was holding 22+ GB. Fail
     # fast at upload time so the user sees the issue BEFORE waiting
-    # for preprocessing/language-detection. Min 4 GB free is enough
-    # for the smallest engine (GigaAM ASR ~3 GB) to start; later
-    # diarization needs ~9.5 GB for pyannote, but by then ASR has
-    # unloaded so we don't need to reserve all 9.5 upfront.
+    # for preprocessing/language-detection. Quality mode should not
+    # squeeze into the absolute minimum: GigaAM batch inference needs
+    # headroom, and we prefer a clear stop over degrading model quality.
     try:
         from backend.core.vram_manager import VRAMManager
 
         vram = VRAMManager()
-        if vram.is_gpu_available:
-            status = vram.get_status()
+        status = vram.get_status()
+        if not bool(status.get("is_dummy", False)):
             free_gb = float(status.get("vram_free_gb", 0.0))
             total_gb = float(status.get("vram_total_gb", 0.0))
-            if free_gb < 4.0:
+            required_gb = _estimated_start_vram_gb(
+                orchestrator._config,
+                asr_engine_override,
+            )
+            if free_gb < required_gb:
                 raise HTTPException(
                     status_code=503,
                     detail=(
@@ -580,7 +625,7 @@ async def upload_audio(
                         f"Закройте другие приложения, использующие GPU "
                         f"(LM Studio, Stable Diffusion, ChatGPT desktop, "
                         f"игры в фоне), и попробуйте снова. Минимум для "
-                        f"запуска: 4 ГБ свободно."
+                        f"запуска: {required_gb:.1f} ГБ свободно."
                     ),
                 )
     except HTTPException:
@@ -918,16 +963,18 @@ async def retry_meeting(
         from backend.core.vram_manager import VRAMManager
 
         vram = VRAMManager()
-        if vram.is_gpu_available:
-            status = vram.get_status()
+        status = vram.get_status()
+        if not bool(status.get("is_dummy", False)):
             free_gb = float(status.get("vram_free_gb", 0.0))
             total_gb = float(status.get("vram_total_gb", 0.0))
-            if free_gb < 4.0:
+            required_gb = _estimated_start_vram_gb(orchestrator._config)
+            if free_gb < required_gb:
                 raise HTTPException(
                     status_code=503,
                     detail=(
                         f"Недостаточно свободной видеопамяти: "
-                        f"{free_gb:.1f} ГБ из {total_gb:.1f} ГБ. Закройте "
+                        f"{free_gb:.1f} ГБ из {total_gb:.1f} ГБ. "
+                        f"Для запуска нужно минимум {required_gb:.1f} ГБ. Закройте "
                         f"другие GPU-приложения и попробуйте снова."
                     ),
                 )

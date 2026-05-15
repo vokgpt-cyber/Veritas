@@ -69,6 +69,46 @@ class Orchestrator:
         self._last_language_mix = None
         self._load_persisted_jobs()
 
+    @staticmethod
+    def _required_vram_gb(engine: Any, label: str) -> float:
+        """Return an engine VRAM requirement or fail with a useful message."""
+        if engine is None:
+            raise RuntimeError(
+                f"{label} engine was not initialized. "
+                "This usually means pipeline settings were changed while a job "
+                "was starting. Retry after the settings screen is closed."
+            )
+        required = getattr(engine, "required_vram_gb", None)
+        if required is None:
+            raise RuntimeError(f"{label} engine does not declare required_vram_gb")
+        return float(required)
+
+    def _cleanup_loaded_engines_after_error(self) -> None:
+        """Best-effort cleanup so failed jobs do not leave VRAM occupied."""
+        for attr, label in (
+            ("_asr", "ASR"),
+            ("_diarization", "diarization"),
+            ("_summarization", "summarization"),
+        ):
+            engine = getattr(self, attr, None)
+            if engine is None:
+                continue
+            try:
+                if getattr(engine, "is_loaded", False):
+                    self._logger.info("Unloading %s engine after error", label)
+                    engine.unload()
+            except Exception as exc:  # noqa: BLE001
+                self._logger.warning(
+                    "Failed to unload %s engine after error: %s",
+                    label,
+                    exc,
+                )
+        try:
+            self._vram.unregister_model()
+            self._vram.release_all()
+        except Exception as exc:  # noqa: BLE001
+            self._logger.warning("Failed to release VRAM after error: %s", exc)
+
     def _resolve_asr_engine(
         self,
         audio_path: Optional[str] = None,
@@ -360,6 +400,8 @@ class Orchestrator:
                 job.meeting_type.value if hasattr(job.meeting_type, "value")
                 else job.meeting_type,
             )
+            asr_engine = self._asr
+            asr_required_vram = self._required_vram_gb(asr_engine, "ASR")
 
             # Stage 2: TRANSCRIBING (ASR first — produces best quality)
             self._update_job(
@@ -369,9 +411,9 @@ class Orchestrator:
                 on_progress(job)
 
             # Check VRAM before loading ASR
-            if not await self._vram.wait_for_available(self._asr.required_vram_gb):
+            if not await self._vram.wait_for_available(asr_required_vram):
                 raise RuntimeError(
-                    f"Insufficient VRAM for ASR ({self._asr.required_vram_gb}GB)"
+                    f"Insufficient VRAM for ASR ({asr_required_vram}GB)"
                 )
 
             # Load the selected quality ASR engine.
@@ -390,9 +432,9 @@ class Orchestrator:
             )
 
             try:
-                setattr(self._asr, "_current_meeting_type", asr_meeting_type)
-                setattr(self._asr, "_current_hot_words", asr_hot_words)
-                self._asr.load()
+                setattr(asr_engine, "_current_meeting_type", asr_meeting_type)
+                setattr(asr_engine, "_current_hot_words", asr_hot_words)
+                asr_engine.load()
             except Exception as exc:  # noqa: BLE001
                 self._logger.error(
                     "ASR engine %r load failed: %s",
@@ -414,15 +456,15 @@ class Orchestrator:
             except Exception:
                 asr_meeting_type = None
             try:
-                setattr(self._asr, "_current_meeting_type", asr_meeting_type)
+                setattr(asr_engine, "_current_meeting_type", asr_meeting_type)
                 if getattr(job, "court_dictionary", ""):
                     setattr(
-                        self._asr,
+                        asr_engine,
                         "_current_hot_words",
                         str(job.court_dictionary)[:1200],
                     )
                 else:
-                    setattr(self._asr, "_current_hot_words", "")
+                    setattr(asr_engine, "_current_hot_words", "")
             except Exception:
                 pass
 
@@ -434,7 +476,7 @@ class Orchestrator:
                     on_progress(job)
 
             transcription = await self._run_with_retry(
-                lambda: self._asr.process(
+                lambda: asr_engine.process(
                     preprocessed_path, progress_callback=transcription_progress
                 ),
                 job,
@@ -454,7 +496,7 @@ class Orchestrator:
 
             # Unload ASR and release VRAM
             self._logger.info("Unloading ASR engine...")
-            self._asr.unload()
+            asr_engine.unload()
             self._logger.info("ASR unloaded, releasing VRAM...")
             self._vram.unregister_model()
             self._vram.release_all()
@@ -466,12 +508,17 @@ class Orchestrator:
                 on_progress(job)
 
             # Check VRAM before loading Diarization
-            if not await self._vram.wait_for_available(self._diarization.required_vram_gb):
+            diarization_engine = self._diarization
+            diarization_required_vram = self._required_vram_gb(
+                diarization_engine,
+                "Diarization",
+            )
+            if not await self._vram.wait_for_available(diarization_required_vram):
                 raise RuntimeError(
-                    f"Insufficient VRAM for diarization ({self._diarization.required_vram_gb}GB)"
+                    f"Insufficient VRAM for diarization ({diarization_required_vram}GB)"
                 )
 
-            self._diarization.load()
+            diarization_engine.load()
             self._vram.register_model("DiarizationEngine")
 
             def diarization_progress(progress: float, message: str = "") -> None:
@@ -520,7 +567,7 @@ class Orchestrator:
                 meeting_type_str = None
 
             diarization = await self._run_with_retry(
-                lambda: self._diarization.process(
+                lambda: diarization_engine.process(
                     preprocessed_path,
                     None,  # No VAD pre-filtering — diarization handles full audio
                     min_speakers=min_spk,
@@ -555,7 +602,7 @@ class Orchestrator:
             self._logger.info(f"Diarization detected {n_speakers} speakers")
 
             # Unload Diarization and release VRAM
-            self._diarization.unload()
+            diarization_engine.unload()
             self._vram.unregister_model()
             self._vram.release_all()
 
@@ -672,10 +719,13 @@ class Orchestrator:
                         "aligned_before_llm_correction",
                         aligned,
                     )
-                    self._summarization.load()  # idempotent
+                    correction_engine = self._summarization
+                    if correction_engine is None:
+                        raise RuntimeError("Summarization engine was not initialized")
+                    correction_engine.load()  # idempotent
                     aligned, corr_stats = correct_transcript(
                         aligned,
-                        self._summarization,
+                        correction_engine,
                         chunk_chars=int(
                             getattr(pp_cfg, "llm_correction_chunk_chars", 4000)
                         ),
@@ -715,7 +765,10 @@ class Orchestrator:
                     on_progress(job)
 
                 # Ollama manages its own VRAM — no VRAMManager needed
-                self._summarization.load()
+                summarization_engine = self._summarization
+                if summarization_engine is None:
+                    raise RuntimeError("Summarization engine was not initialized")
+                summarization_engine.load()
 
                 def summarization_progress(progress: float, message: str = "") -> None:
                     self._update_job(
@@ -732,7 +785,7 @@ class Orchestrator:
                     self._logger.info("No meeting context provided")
 
                 protocol_result = await self._run_with_retry(
-                    lambda: self._summarization.process(
+                    lambda: summarization_engine.process(
                         aligned,
                         language=detected_language,
                         progress_callback=summarization_progress,
@@ -815,7 +868,7 @@ class Orchestrator:
                 self._save_intermediate(job.id, "protocol", protocol)
 
                 # Ollama unload (sends keep_alive=0 to free GPU memory)
-                self._summarization.unload()
+                summarization_engine.unload()
 
                 # Protocol QA — only the legacy MeetingProtocol schema is
                 # understood by QA. For type-specific payloads we skip QA
@@ -920,6 +973,7 @@ class Orchestrator:
 
         except Exception as e:
             self._logger.error(f"Pipeline error for job {job.id}: {e}", exc_info=True)
+            self._cleanup_loaded_engines_after_error()
             job.error = str(e)
             job.retry_count += 1
 
@@ -1520,6 +1574,21 @@ class Orchestrator:
             PipelineState.RETRYING,
         }
         return any(job.state in active_states for job in self._jobs.values())
+
+    def active_job_count(self) -> int:
+        """Return the number of jobs currently occupying the pipeline."""
+        active_states = {
+            PipelineState.UPLOADED,
+            PipelineState.PREPROCESSING,
+            PipelineState.TRANSCRIBING,
+            PipelineState.DIARIZING,
+            PipelineState.ALIGNING,
+            PipelineState.SUMMARIZING,
+            PipelineState.QA_VALIDATING,
+            PipelineState.FORMATTING,
+            PipelineState.RETRYING,
+        }
+        return sum(job.state in active_states for job in self._jobs.values())
 
     def get_job(self, job_id: str) -> Optional[MeetingJob]:
         """

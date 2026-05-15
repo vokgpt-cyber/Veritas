@@ -217,6 +217,12 @@ export default function SystemPage() {
                     {gpu.device_name}
                   </span>
                 </div>
+                <div className="flex justify-between text-sm mt-1">
+                  <span className="text-epam-gray-600">Telemetry</span>
+                  <span className="font-medium text-xs">
+                    {gpu.source ?? "server"}
+                  </span>
+                </div>
                 {gpu.current_model && (
                   <div className="flex justify-between text-sm mt-1">
                     <span className="text-epam-gray-600">Loaded Model</span>
